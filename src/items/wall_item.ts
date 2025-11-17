@@ -53,16 +53,16 @@ export abstract class WallItem extends Item {
      */
     public closestWallEdge(): HalfEdge {
 
-      var wallEdges = this.model.floorplan.wallEdges();
+      const wallEdges = this.model.floorplan.wallEdges();
 
-      var wallEdge: HalfEdge | null = null;
-      var minDistance: number | null = null;
+      let wallEdge: HalfEdge | null = null;
+      let minDistance: number | null = null;
 
-      var itemX = this.position.x;
-      var itemZ = this.position.z;
+      const itemX = this.position.x;
+      const itemZ = this.position.z;
 
       wallEdges.forEach((edge: HalfEdge) => {
-        var distance = edge.distanceTo(itemX, itemZ);
+        const distance = edge.distanceTo(itemX, itemZ);
         if (minDistance === null || distance < minDistance) {
           minDistance = distance;
           wallEdge = edge;
@@ -116,14 +116,14 @@ export abstract class WallItem extends Item {
 
     /** */
     public placeInRoom(): void {
-      var closestWallEdge = this.closestWallEdge();
+      const closestWallEdge = this.closestWallEdge();
       this.changeWallEdge(closestWallEdge);
       this.updateSize();
 
       if (!this.position_set) {
         // position not set
-        var center = closestWallEdge.interiorCenter();
-        var newPos = new THREE.Vector3(
+        const center = closestWallEdge.interiorCenter();
+        const newPos = new THREE.Vector3(
           center.x,
           closestWallEdge.wall.height / 2.0,
           center.y);
@@ -164,18 +164,18 @@ export abstract class WallItem extends Item {
       wallEdge.wall.fireOnDelete(this.removeFromScene.bind(this));
 
       // find angle between wall normals
-      var normal2 = new THREE.Vector2();
+      const normal2 = new THREE.Vector2();
       // Note: BufferGeometry doesn't have faces, compute normal from wall edge instead
-      var start = wallEdge.interiorStart();
-      var end = wallEdge.interiorEnd();
-      var dx = end.x - start.x;
-      var dy = end.y - start.y;
+      const start = wallEdge.interiorStart();
+      const end = wallEdge.interiorEnd();
+      const dx = end.x - start.x;
+      const dy = end.y - start.y;
       // Normal is perpendicular to the wall edge
       normal2.x = -dy;
       normal2.y = dx;
       normal2.normalize();
 
-      var angle = Utils.angle(
+      const angle = Utils.angle(
         this.refVec.x, this.refVec.y,
         normal2.x, normal2.y);
       this.rotation.y = angle;
@@ -198,8 +198,8 @@ export abstract class WallItem extends Item {
 
     /** takes the move vec3, and makes sure object stays bounded on plane */
     private boundMove(vec3: THREE.Vector3): void {
-      var tolerance = 1;
-      var edge = this.currentWallEdge!;
+      const tolerance = 1;
+      const edge = this.currentWallEdge!;
       vec3.applyMatrix4(edge.interiorTransform);
 
       if (vec3.x < this.sizeX / 2.0 + tolerance) {

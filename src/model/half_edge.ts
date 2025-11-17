@@ -75,10 +75,10 @@ export class HalfEdge {
     }
 
     /**
-     * 
+     *
      */
     public setTexture(textureUrl: string, textureStretch: boolean, textureScale: number): void {
-      var texture = {
+      const texture = {
         url: textureUrl,
         stretch: textureStretch,
         scale: textureScale
@@ -100,16 +100,16 @@ export class HalfEdge {
         return new THREE.Vector3(corner.x, 0, corner.y);
       }
 
-      var v1 = transformCorner(this.interiorStart());
-      var v2 = transformCorner(this.interiorEnd());
-      var v3 = v2.clone();
+      const v1 = transformCorner(this.interiorStart());
+      const v2 = transformCorner(this.interiorEnd());
+      const v3 = v2.clone();
       v3.y = this.wall.height;
-      var v4 = v1.clone();
+      const v4 = v1.clone();
       v4.y = this.wall.height;
 
-      var geometry = new THREE.BufferGeometry();
+      const geometry = new THREE.BufferGeometry();
 
-      var positions = new Float32Array([
+      const positions = new Float32Array([
         v1.x, v1.y, v1.z,
         v2.x, v2.y, v2.z,
         v3.x, v3.y, v3.z,
@@ -136,8 +136,8 @@ export class HalfEdge {
     }
 
     public interiorDistance(): number {
-      var start = this.interiorStart();
-      var end = this.interiorEnd();
+      const start = this.interiorStart();
+      const end = this.interiorEnd();
       return Utils.distance(start.x, start.y, end.x, end.y);
     }
 
@@ -148,14 +148,14 @@ export class HalfEdge {
       end: { x: number, y: number }
     ): void {
 
-      var v1 = start;
-      var v2 = end;
+      const v1 = start;
+      const v2 = end;
 
-      var angle = Utils.angle(1, 0, v2.x - v1.x, v2.y - v1.y);
+      const angle = Utils.angle(1, 0, v2.x - v1.x, v2.y - v1.y);
 
-      var tt = new THREE.Matrix4();
+      const tt = new THREE.Matrix4();
       tt.makeTranslation(-v1.x, 0, -v1.y);
-      var tr = new THREE.Matrix4();
+      const tr = new THREE.Matrix4();
       tr.makeRotationY(-angle);
       transform.multiplyMatrices(tr, tt);
       invTransform.copy(transform).invert();
@@ -201,7 +201,7 @@ export class HalfEdge {
 
     // these return an object with attributes x, y
     public interiorEnd(): { x: number, y: number } {
-      var vec = this.halfAngleVector(this, this.next);
+      const vec = this.halfAngleVector(this, this.next);
       return {
         x: this.getEnd().x + vec.x,
         y: this.getEnd().y + vec.y
@@ -209,7 +209,7 @@ export class HalfEdge {
     }
 
     public interiorStart(): { x: number, y: number } {
-      var vec = this.halfAngleVector(this.prev, this);
+      const vec = this.halfAngleVector(this.prev, this);
       return {
         x: this.getStart().x + vec.x,
         y: this.getStart().y + vec.y
@@ -224,7 +224,7 @@ export class HalfEdge {
     }
 
     public exteriorEnd(): { x: number, y: number }  {
-      var vec = this.halfAngleVector(this, this.next);
+      const vec = this.halfAngleVector(this, this.next);
       return {
         x: this.getEnd().x - vec.x,
         y: this.getEnd().y - vec.y
@@ -232,7 +232,7 @@ export class HalfEdge {
     }
 
     public exteriorStart(): { x: number, y: number }  {
-      var vec = this.halfAngleVector(this.prev, this);
+      const vec = this.halfAngleVector(this.prev, this);
       return {
         x: this.getStart().x - vec.x,
         y: this.getStart().y - vec.y
@@ -247,7 +247,7 @@ export class HalfEdge {
         this.exteriorEnd(), this.exteriorStart()];
     }
 
-    /** 
+    /**
      * Gets CCW angle from v1 to v2
      */
     private halfAngleVector(v1: HalfEdge | null, v2: HalfEdge | null): { x: number, y: number } {
@@ -255,10 +255,10 @@ export class HalfEdge {
         return { x: 0, y: 0 };
       }
       // make the best of things if we dont have prev or next
-      var v1startX: number;
-      var v1startY: number;
-      var v1endX: number;
-      var v1endY: number;
+      let v1startX: number;
+      let v1startY: number;
+      let v1endX: number;
+      let v1endY: number;
       if (!v1 && v2) {
         v1startX = v2.getStart().x - (v2.getEnd().x - v2.getStart().x);
         v1startY = v2.getStart().y - (v2.getEnd().y - v2.getStart().y);
@@ -271,10 +271,10 @@ export class HalfEdge {
         v1endY = (v1 as HalfEdge).getEnd().y;
       }
 
-      var v2startX: number;
-      var v2startY: number;
-      var v2endX: number;
-      var v2endY: number;
+      let v2startX: number;
+      let v2startY: number;
+      let v2endX: number;
+      let v2endY: number;
       if (!v2 && v1) {
         v2startX = v1.getEnd().x;
         v2startY = v1.getEnd().y;
@@ -288,29 +288,29 @@ export class HalfEdge {
       }
 
       // CCW angle between edges
-      var theta = Utils.angle2pi(
+      const theta = Utils.angle2pi(
         v1startX - v1endX,
         v1startY - v1endY,
         v2endX - v1endX,
         v2endY - v1endY);
 
       // cosine and sine of half angle
-      var cs = Math.cos(theta / 2.0);
-      var sn = Math.sin(theta / 2.0);
+      const cs = Math.cos(theta / 2.0);
+      const sn = Math.sin(theta / 2.0);
 
       // rotate v2
-      var v2dx = v2endX - v2startX;
-      var v2dy = v2endY - v2startY;
+      const v2dx = v2endX - v2startX;
+      const v2dy = v2endY - v2startY;
 
-      var vx = v2dx * cs - v2dy * sn;
-      var vy = v2dx * sn + v2dy * cs;
+      const vx = v2dx * cs - v2dy * sn;
+      const vy = v2dx * sn + v2dy * cs;
 
       // normalize
-      var mag = Utils.distance(0, 0, vx, vy);
-      var desiredMag = (this.offset) / sn;
-      var scalar = desiredMag / mag;
+      const mag = Utils.distance(0, 0, vx, vy);
+      const desiredMag = (this.offset) / sn;
+      const scalar = desiredMag / mag;
 
-      var halfAngleVector = {
+      const halfAngleVector = {
         x: vx * scalar,
         y: vy * scalar
       }

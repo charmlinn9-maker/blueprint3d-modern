@@ -116,15 +116,15 @@ export abstract class Item extends THREE.Mesh {
 
     /** */
     public resize(height: number, width: number, depth: number) {
-      var x = width / this.getWidth();
-      var y = height / this.getHeight();
-      var z = depth / this.getDepth();
+      const x = width / this.getWidth();
+      const y = height / this.getHeight();
+      const z = depth / this.getDepth();
       this.setScale(x, y, z);
     }
 
     /** */
     public setScale(x: number, y: number, z: number) {
-      var scaleVec = new THREE.Vector3(x, y, z);
+      const scaleVec = new THREE.Vector3(x, y, z);
       this.halfSize.multiply(scaleVec);
       scaleVec.multiply(this.scale)
       this.scale.set(scaleVec.x, scaleVec.y, scaleVec.z);
@@ -179,9 +179,9 @@ export abstract class Item extends THREE.Mesh {
 
     /** on is a bool */
     public updateHighlight() {
-      var on = this.hover || this.selected;
+      const on = this.hover || this.selected;
       this.highlighted = on;
-      var hex = on ? this.emissiveColor : 0x000000;
+      const hex = on ? this.emissiveColor : 0x000000;
       const materials = Array.isArray(this.material) ? this.material : [this.material];
       materials.forEach((material) => {
         if ('emissive' in material && material.emissive) {
@@ -231,16 +231,16 @@ export abstract class Item extends THREE.Mesh {
     /** */
     public rotate(intersection: THREE.Intersection | null): void {
       if (intersection) {
-        var angle = Utils.angle(
+        let angle = Utils.angle(
           0,
           1,
           intersection.point.x - this.position.x,
           intersection.point.z - this.position.z);
 
-        var snapTolerance = Math.PI / 16.0;
+        const snapTolerance = Math.PI / 16.0;
 
         // snap to intervals near Math.PI/2
-        for (var i = -4; i <= 4; i++) {
+        for (let i = -4; i <= 4; i++) {
           if (Math.abs(angle - (i * (Math.PI / 2))) < snapTolerance) {
             angle = i * (Math.PI / 2);
             break;
@@ -282,14 +282,14 @@ export abstract class Item extends THREE.Mesh {
 
       position = position || this.position;
 
-      var halfSize = this.halfSize.clone();
+      const halfSize = this.halfSize.clone();
 
-      var c1 = new THREE.Vector3(-halfSize.x, 0, -halfSize.z);
-      var c2 = new THREE.Vector3(halfSize.x, 0, -halfSize.z);
-      var c3 = new THREE.Vector3(halfSize.x, 0, halfSize.z);
-      var c4 = new THREE.Vector3(-halfSize.x, 0, halfSize.z);
+      const c1 = new THREE.Vector3(-halfSize.x, 0, -halfSize.z);
+      const c2 = new THREE.Vector3(halfSize.x, 0, -halfSize.z);
+      const c3 = new THREE.Vector3(halfSize.x, 0, halfSize.z);
+      const c4 = new THREE.Vector3(-halfSize.x, 0, halfSize.z);
 
-      var transform = new THREE.Matrix4();
+      const transform = new THREE.Matrix4();
       //console.log(this.rotation.y);
       transform.makeRotationY(this.rotation.y); //  + Math.PI/2)
 
@@ -305,10 +305,10 @@ export abstract class Item extends THREE.Mesh {
 
       //halfSize.applyMatrix4(transform);
 
-      //var min = position.clone().sub(halfSize);
-      //var max = position.clone().add(halfSize);
+      //const min = position.clone().sub(halfSize);
+      //const max = position.clone().add(halfSize);
 
-      var corners = [
+      const corners = [
         { x: c1.x, y: c1.z },
         { x: c2.x, y: c2.z },
         { x: c3.x, y: c3.z },
@@ -342,7 +342,7 @@ export abstract class Item extends THREE.Mesh {
 
     /** */
     private objectHalfSize(): THREE.Vector3 {
-      var objectBox = new THREE.Box3();
+      const objectBox = new THREE.Box3();
       objectBox.setFromObject(this);
       return objectBox.max.clone().sub(objectBox.min).divideScalar(2);
     }
@@ -351,7 +351,7 @@ export abstract class Item extends THREE.Mesh {
     public createGlow(color: number, opacity?: number, ignoreDepth?: boolean): THREE.Mesh {
       ignoreDepth = ignoreDepth || false
       opacity = opacity || 0.2;
-      var glowMaterial = new THREE.MeshBasicMaterial({
+      const glowMaterial = new THREE.MeshBasicMaterial({
         color: color,
         blending: THREE.AdditiveBlending,
         opacity: 0.2,
@@ -359,7 +359,7 @@ export abstract class Item extends THREE.Mesh {
         depthTest: !ignoreDepth
       });
 
-      var glow = new THREE.Mesh(this.geometry.clone(), glowMaterial);
+      const glow = new THREE.Mesh(this.geometry.clone(), glowMaterial);
       glow.position.copy(this.position);
       glow.rotation.copy(this.rotation);
       glow.scale.copy(this.scale);

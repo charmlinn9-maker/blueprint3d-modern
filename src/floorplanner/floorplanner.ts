@@ -98,8 +98,8 @@ export class Floorplanner {
 
     this.view = new FloorplannerView(this.floorplan, this, canvas);
 
-    var cmPerFoot = 30.48;
-    var pixelsPerFoot = 15.0;
+    const cmPerFoot = 30.48;
+    const pixelsPerFoot = 15.0;
     this.cmPerPixel = cmPerFoot * (1.0 / pixelsPerFoot);
     this.pixelsPerCm = 1.0 / this.cmPerPixel;
 
@@ -197,9 +197,9 @@ export class Floorplanner {
 
     // update object target
     if (this.mode != floorplannerModes.DRAW && !this.mouseDown) {
-      var hoverCorner: Corner | null = this.floorplan.overlappedCorner(this.mouseX, this.mouseY);
-      var hoverWall: Wall | null = this.floorplan.overlappedWall(this.mouseX, this.mouseY);
-      var draw = false;
+      const hoverCorner: Corner | null = this.floorplan.overlappedCorner(this.mouseX, this.mouseY);
+      const hoverWall: Wall | null = this.floorplan.overlappedWall(this.mouseX, this.mouseY);
+      let draw = false;
       if (hoverCorner != this.activeCorner) {
         this.activeCorner = hoverCorner;
         draw = true;
@@ -251,7 +251,7 @@ export class Floorplanner {
 
     // drawing
     if (this.mode == floorplannerModes.DRAW && !this.mouseMoved) {
-      var corner = this.floorplan.newCorner(this.targetX, this.targetY);
+      const corner = this.floorplan.newCorner(this.targetX, this.targetY);
       if (this.lastNode != null) {
         this.floorplan.newWall(this.lastNode, corner);
       }
@@ -291,9 +291,9 @@ export class Floorplanner {
 
   /** Sets the origin so that floorplan is centered */
   private resetOrigin(): void {
-    var centerX = this.canvasElement.clientWidth / 2.0;
-    var centerY = this.canvasElement.clientHeight / 2.0;
-    var centerFloorplan = this.floorplan.getCenter();
+    const centerX = this.canvasElement.clientWidth / 2.0;
+    const centerY = this.canvasElement.clientHeight / 2.0;
+    const centerFloorplan = this.floorplan.getCenter();
     this.originX = centerFloorplan.x * this.pixelsPerCm - centerX;
     this.originY = centerFloorplan.z * this.pixelsPerCm - centerY;
   }

@@ -55,7 +55,7 @@ export class Model {
       // TODO: a much better serialization format.
       this.roomLoadingCallbacks.fire();
 
-      var data = JSON.parse(json) as { floorplan: SavedFloorplan; items: SerializedItem[] };
+      const data = JSON.parse(json) as { floorplan: SavedFloorplan; items: SerializedItem[] };
       this.newRoom(
         data.floorplan,
         data.items
@@ -65,10 +65,10 @@ export class Model {
     }
 
     private exportSerialized(): string {
-      var items_arr: SerializedItem[] = [];
-      var objects = this.scene.getItems();
-      for (var i = 0; i < objects.length; i++) {
-        var object = objects[i];
+      const items_arr: SerializedItem[] = [];
+      const objects = this.scene.getItems();
+      for (let i = 0; i < objects.length; i++) {
+        const object = objects[i];
         const metadata = object.metadata;
         items_arr[i] = {
           item_name: metadata.itemName ?? '',
@@ -86,7 +86,7 @@ export class Model {
         };
       }
 
-      var room = {
+      const room = {
         floorplan: (this.floorplan.saveFloorplan()),
         items: items_arr
       };
@@ -98,15 +98,15 @@ export class Model {
       this.scene.clearItems();
       this.floorplan.loadFloorplan(floorplan);
       items.forEach((item) => {
-        var position = new THREE.Vector3(
+        const position = new THREE.Vector3(
           item.xpos, item.ypos, item.zpos);
-        var metadata = {
+        const metadata = {
           itemName: item.item_name,
           resizable: item.resizable,
           itemType: item.item_type,
           modelUrl: item.model_url
         };
-        var scale = new THREE.Vector3(
+        const scale = new THREE.Vector3(
           item.scale_x,
           item.scale_y,
           item.scale_z

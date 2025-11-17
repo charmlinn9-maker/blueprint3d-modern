@@ -48,7 +48,7 @@ export class Room {
     }
 
     public getUuid(): string {
-      var cornerUuids = Utils.map(this.corners, function (c) {
+      const cornerUuids = Utils.map(this.corners, function (c) {
         return c.id;
       });
       cornerUuids.sort();
@@ -60,8 +60,8 @@ export class Room {
     }
 
     public getTexture(): { url: string; scale: number } {
-      var uuid = this.getUuid();
-      var tex = this.floorplan.getFloorTexture(uuid);
+      const uuid = this.getUuid();
+      const tex = this.floorplan.getFloorTexture(uuid);
       return tex || defaultRoomTexture;
     }
 
@@ -69,20 +69,20 @@ export class Room {
      * textureStretch always true, just an argument for consistency with walls
      */
     private setTexture(textureUrl: string, textureStretch: boolean, textureScale: number): void {
-      var uuid = this.getUuid();
+      const uuid = this.getUuid();
       this.floorplan.setFloorTexture(uuid, textureUrl, textureScale);
       this.floorChangeCallbacks.fire();
     }
 
     private generatePlane(): void {
-      var points: THREE.Vector2[] = [];
+      const points: THREE.Vector2[] = [];
       this.interiorCorners.forEach((corner) => {
         points.push(new THREE.Vector2(
           corner.x,
           corner.y));
       });
-      var shape = new THREE.Shape(points);
-      var geometry = new THREE.ShapeGeometry(shape);
+      const shape = new THREE.Shape(points);
+      const geometry = new THREE.ShapeGeometry(shape);
       this.floorPlane = new THREE.Mesh(geometry,
         new THREE.MeshBasicMaterial({
           side: THREE.DoubleSide
@@ -104,7 +104,7 @@ export class Room {
       if (!this.edgePointer) {
         return;
       }
-      var edge = this.edgePointer;
+      let edge = this.edgePointer;
       while (true) {
         this.interiorCorners.push(edge.interiorStart());
         edge.generatePlane();
@@ -124,17 +124,17 @@ export class Room {
      */
     private updateWalls(): void {
 
-      var prevEdge: HalfEdge | null = null;
-      var firstEdge: HalfEdge | null = null;
+      let prevEdge: HalfEdge | null = null;
+      let firstEdge: HalfEdge | null = null;
 
-      for (var i = 0; i < this.corners.length; i++) {
+      for (let i = 0; i < this.corners.length; i++) {
 
-        var firstCorner = this.corners[i];
-        var secondCorner = this.corners[(i + 1) % this.corners.length];
+        const firstCorner = this.corners[i];
+        const secondCorner = this.corners[(i + 1) % this.corners.length];
 
         // find if wall is heading in that direction
-        var wallTo = firstCorner.wallTo(secondCorner);
-        var wallFrom = firstCorner.wallFrom(secondCorner);
+        const wallTo = firstCorner.wallTo(secondCorner);
+        const wallFrom = firstCorner.wallFrom(secondCorner);
 
         let edge: HalfEdge | null = null;
 

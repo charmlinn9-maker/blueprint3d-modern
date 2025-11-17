@@ -15,7 +15,7 @@ export abstract class FloorItem extends Item {
     /** */
     public placeInRoom() {
       if (!this.position_set) {
-        var center = this.model.floorplan.getCenter();
+        const center = this.model.floorplan.getCenter();
         this.position.x = center.x;
         this.position.z = center.z;
         this.position.y = 0.5 * (this.geometry.boundingBox!.max.y - this.geometry.boundingBox!.min.y);
@@ -42,12 +42,12 @@ export abstract class FloorItem extends Item {
 
     /** */
     public isValidPosition(vec3: THREE.Vector3): boolean {
-      var corners = this.getCorners('x', 'z', vec3);
+      const corners = this.getCorners('x', 'z', vec3);
 
       // check if we are in a room
-      var rooms = this.model.floorplan.getRooms();
-      var isInARoom = false;
-      for (var i = 0; i < rooms.length; i++) {
+      const rooms = this.model.floorplan.getRooms();
+      let isInARoom = false;
+      for (let i = 0; i < rooms.length; i++) {
         if (Utils.pointInPolygon(vec3.x, vec3.z, rooms[i].interiorCorners) &&
           !Utils.polygonPolygonIntersect(corners, rooms[i].interiorCorners)) {
           isInARoom = true;

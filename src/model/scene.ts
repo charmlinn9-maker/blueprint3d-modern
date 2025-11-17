@@ -124,8 +124,8 @@ export class Scene {
         scale: scale,
         fixed: fixed
       });
-      var scope = this;
-      var loaderCallback = (geometry: THREE.BufferGeometry, materials: THREE.Material[]) => {
+      const scope = this;
+      const loaderCallback = (geometry: THREE.BufferGeometry, materials: THREE.Material[]) => {
         console.log('Creating item with materials:', {
           loadedMaterials: materials.length,
           materialTypes: materials.map(m => m.type)
@@ -141,7 +141,7 @@ export class Scene {
         });
 
         // Custom JSONLoader already returns BufferGeometry
-        var item = new (Factory.getClass(itemType))(
+        const item = new (Factory.getClass(itemType))(
           scope.model,
           metadata, geometry,
           materials,  // Use actual materials from the loaded model

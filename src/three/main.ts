@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { EventEmitter } from '../core/events';
 import { Controller } from './controller';
-import { Floorplan } from './floorplan';
+import { FloorplanThree } from './floorplan';
 import { Lights } from './lights';
 import { Skybox } from './skybox';
 import { Controls } from './controls';
@@ -40,7 +40,7 @@ export class Main {
   private camera!: THREE.PerspectiveCamera;
   private renderer!: THREE.WebGLRenderer;
   private controller!: Controller;
-  private floorplan!: Floorplan;
+  private floorplan!: FloorplanThree;
   private _needsUpdate = false;
   private lastRender = Date.now();
   private mouseOver = false;
@@ -81,7 +81,7 @@ export class Main {
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-    const skybox = new Skybox(this.scene);
+    const skybox = new Skybox(this.scene.getScene());
 
     this.controls = new Controls(this.camera, this.domElement);
 
@@ -102,9 +102,9 @@ export class Main {
     this.centerCamera();
     this.model.floorplan.fireOnUpdatedRooms(this.centerCamera.bind(this));
 
-    const lights = new Lights(this.scene, this.model.floorplan);
+    const lights = new Lights(this.scene.getScene(), this.model.floorplan);
 
-    this.floorplan = new Floorplan(this.scene,
+    this.floorplan = new FloorplanThree(this.scene.getScene(),
       this.model.floorplan, this.controls);
 
     this.animate();

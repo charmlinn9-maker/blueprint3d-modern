@@ -7,9 +7,10 @@ import { Room } from './room';
 import { HalfEdge } from './half_edge';
 
 export type FloorTexture = { url: string; scale: number };
+export type WallTexture = { url: string; stretch: boolean; scale: number };
 export interface SavedFloorplan {
   corners: Record<string, { x: number; y: number }>;
-  walls: Array<{ corner1: string; corner2: string; frontTexture?: unknown; backTexture?: unknown }>;
+  walls: Array<{ corner1: string; corner2: string; frontTexture?: WallTexture; backTexture?: WallTexture }>;
   wallTextures?: unknown[];
   floorTextures?: Record<string, FloorTexture>;
   newFloorTextures?: Record<string, FloorTexture>;

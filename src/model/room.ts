@@ -24,7 +24,7 @@ const defaultRoomTexture = {
 export class Room {
 
     /** */
-    public interiorCorners: Corner[] = [];
+    public interiorCorners: { x: number; y: number }[] = [];
 
     /** */
     private edgePointer: HalfEdge | null = null;
@@ -59,7 +59,7 @@ export class Room {
       this.floorChangeCallbacks.add(callback);
     }
 
-    private getTexture(): { url: string; scale: number } {
+    public getTexture(): { url: string; scale: number } {
       var uuid = this.getUuid();
       var tex = this.floorplan.getFloorTexture(uuid);
       return tex || defaultRoomTexture;
@@ -110,8 +110,10 @@ export class Room {
         edge.generatePlane();
         if (edge.next === this.edgePointer) {
           break;
-        } else {
+        } else if (edge.next) {
           edge = edge.next;
+        } else {
+          break;
         }
       }
     }

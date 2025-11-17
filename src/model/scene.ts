@@ -145,7 +145,9 @@ export class Scene {
           scope.model,
           metadata, geometry,
           materials,  // Use actual materials from the loaded model
-          position, rotation, scale
+          position,
+          rotation,
+          scale
         );
         item.fixed = fixed || false;
         scope.items.push(item);

@@ -10,7 +10,7 @@ import { Metadata } from './metadata';
  */
 export abstract class WallItem extends Item {
   /** The currently applied wall edge. */
-  protected currentWallEdge: HalfEdge = null;
+  protected currentWallEdge: HalfEdge | null = null;
     /* TODO:
        This caused a huge headache.
        HalfEdges get destroyed/created every time floorplan is edited.
@@ -42,7 +42,7 @@ export abstract class WallItem extends Item {
     /** */
     protected backVisible = false;
 
-    constructor(model: Model, metadata: Metadata, geometry: THREE.BufferGeometry, material: THREE.Material | THREE.Material[], position: THREE.Vector3, rotation: number, scale: THREE.Vector3) {
+    constructor(model: Model, metadata: Metadata, geometry: THREE.BufferGeometry, material: THREE.Material | THREE.Material[], position?: THREE.Vector3, rotation?: number, scale?: THREE.Vector3) {
       super(model, metadata, geometry, material, position, rotation, scale);
 
       this.allowRotate = false;
@@ -55,8 +55,8 @@ export abstract class WallItem extends Item {
 
       var wallEdges = this.model.floorplan.wallEdges();
 
-      var wallEdge = null;
-      var minDistance = null;
+      var wallEdge: HalfEdge | null = null;
+      var minDistance: number | null = null;
 
       var itemX = this.position.x;
       var itemZ = this.position.z;
@@ -69,7 +69,7 @@ export abstract class WallItem extends Item {
         }
       });
 
-      return wallEdge;
+      return wallEdge!;
     }
 
     /** */
@@ -82,7 +82,7 @@ export abstract class WallItem extends Item {
 
     /** */
     private redrawWall() {
-      if (this.addToWall) {
+      if (this.addToWall && this.currentWallEdge) {
         this.currentWallEdge.wall.fireRedraw();
       }
     }
@@ -105,7 +105,7 @@ export abstract class WallItem extends Item {
     }
 
     /** */
-    public resized() {
+    public resized(): void {
       if (this.boundToFloor) {
         this.position.y = 0.5 * (this.geometry.boundingBox!.max.y - this.geometry.boundingBox!.min.y) * this.scale.y + 0.01;
       }
@@ -115,7 +115,7 @@ export abstract class WallItem extends Item {
     }
 
     /** */
-    public placeInRoom() {
+    public placeInRoom(): void {
       var closestWallEdge = this.closestWallEdge();
       this.changeWallEdge(closestWallEdge);
       this.updateSize();
@@ -134,8 +134,8 @@ export abstract class WallItem extends Item {
     };
 
     /** */
-    public moveToPosition(vec3, intersection) {
-      this.changeWallEdge(intersection.object.edge);
+    public moveToPosition(vec3: THREE.Vector3, intersection: THREE.Intersection | null): void {
+      this.changeWallEdge((intersection!.object as any).edge);
       this.boundMove(vec3);
       this.position.copy(vec3);
       this.redrawWall();
@@ -147,7 +147,7 @@ export abstract class WallItem extends Item {
     }
 
     /** */
-    private changeWallEdge(wallEdge) {
+    private changeWallEdge(wallEdge: HalfEdge): void {
       if (this.currentWallEdge != null) {
         if (this.addToWall) {
           Utils.removeValue(this.currentWallEdge.wall.items, this);
@@ -159,9 +159,9 @@ export abstract class WallItem extends Item {
 
       // handle subscription to wall being removed
       if (this.currentWallEdge != null) {
-        this.currentWallEdge.wall.dontFireOnDelete(this.remove.bind(this));
+        this.currentWallEdge.wall.dontFireOnDelete(this.removeFromScene.bind(this));
       }
-      wallEdge.wall.fireOnDelete(this.remove.bind(this));
+      wallEdge.wall.fireOnDelete(this.removeFromScene.bind(this));
 
       // find angle between wall normals
       var normal2 = new THREE.Vector2();
@@ -192,14 +192,14 @@ export abstract class WallItem extends Item {
 
     /** Returns an array of planes to use other than the ground plane
      * for passing intersection to clickPressed and clickDragged */
-    public customIntersectionPlanes() {
+    public customIntersectionPlanes(): THREE.Mesh[] {
       return this.model.floorplan.wallEdgePlanes();
     }
 
     /** takes the move vec3, and makes sure object stays bounded on plane */
-    private boundMove(vec3) {
+    private boundMove(vec3: THREE.Vector3): void {
       var tolerance = 1;
-      var edge = this.currentWallEdge;
+      var edge = this.currentWallEdge!;
       vec3.applyMatrix4(edge.interiorTransform);
 
       if (vec3.x < this.sizeX / 2.0 + tolerance) {
@@ -221,5 +221,10 @@ export abstract class WallItem extends Item {
       vec3.z = this.getWallOffset();
 
       vec3.applyMatrix4(edge.invInteriorTransform);
+    }
+
+    /** Wall items are always in a valid position when attached to a wall */
+    public isValidPosition(vec3: THREE.Vector3): boolean {
+      return true;
     }
   }

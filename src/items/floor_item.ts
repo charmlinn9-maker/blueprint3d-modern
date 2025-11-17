@@ -8,7 +8,7 @@ import { Metadata } from './metadata';
  * A Floor Item is an entity to be placed related to a floor.
  */
 export abstract class FloorItem extends Item {
-  constructor(model: Model, metadata: Metadata, geometry: THREE.BufferGeometry, material: THREE.Material | THREE.Material[], position: THREE.Vector3, rotation: number, scale: THREE.Vector3) {
+  constructor(model: Model, metadata: Metadata, geometry: THREE.BufferGeometry, material: THREE.Material | THREE.Material[], position?: THREE.Vector3, rotation?: number, scale?: THREE.Vector3) {
       super(model, metadata, geometry, material, position, rotation, scale);
     };
 
@@ -23,12 +23,12 @@ export abstract class FloorItem extends Item {
     };
 
     /** Take action after a resize */
-    public resized() {
+    public resized(): void {
       this.position.y = this.halfSize.y;
     }
 
     /** */
-    public moveToPosition(vec3, intersection) {
+    public moveToPosition(vec3: THREE.Vector3, intersection: THREE.Intersection | null): void {
       // keeps the position in the room and on the floor
       if (!this.isValidPosition(vec3)) {
         this.showError(vec3);
@@ -41,7 +41,7 @@ export abstract class FloorItem extends Item {
     }
 
     /** */
-    public isValidPosition(vec3): boolean {
+    public isValidPosition(vec3: THREE.Vector3): boolean {
       var corners = this.getCorners('x', 'z', vec3);
 
       // check if we are in a room

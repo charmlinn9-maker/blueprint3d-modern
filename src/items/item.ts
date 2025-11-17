@@ -38,13 +38,13 @@ export abstract class Item extends THREE.Mesh {
     private resizable: boolean;
 
     /** Does this object affect other floor items */
-    protected obstructFloorMoves = true;
+    public obstructFloorMoves = true;
 
     /** */
-    protected position_set: boolean;
+    public position_set: boolean;
 
     /** Show rotate option in context menu */
-    protected allowRotate = true;
+    public allowRotate = true;
 
     /** */
     public fixed = false;
@@ -53,7 +53,7 @@ export abstract class Item extends THREE.Mesh {
     private dragOffset = new THREE.Vector3();
 
     /** */
-    protected halfSize: THREE.Vector3;
+    public halfSize: THREE.Vector3;
 
     /** Constructs an item.
      * @param model TODO
@@ -64,7 +64,7 @@ export abstract class Item extends THREE.Mesh {
      * @param rotation TODO
      * @param scale TODO
      */
-    constructor(protected model: Model, public metadata: Metadata, geometry: THREE.BufferGeometry, material: THREE.Material | THREE.Material[], position: THREE.Vector3, rotation: number, scale: THREE.Vector3) {
+    constructor(protected model: Model, public metadata: Metadata, geometry: THREE.BufferGeometry, material: THREE.Material | THREE.Material[], position?: THREE.Vector3, rotation?: number, scale?: THREE.Vector3) {
       // Center geometry in its bounding box BEFORE calling super
       geometry.computeBoundingBox();
 
@@ -86,7 +86,7 @@ export abstract class Item extends THREE.Mesh {
 
       this.scene = this.model.scene;
       this.errorColor = 0xff0000;
-      this.resizable = metadata.resizable;
+      this.resizable = metadata.resizable || false;
 
       this.castShadow = true;
       this.receiveShadow = false;
@@ -110,9 +110,9 @@ export abstract class Item extends THREE.Mesh {
     };
 
     /** */
-    public remove() {
+    public removeFromScene(): void {
       this.scene.removeItem(this);
-    };
+    }
 
     /** */
     public resize(height: number, width: number, depth: number) {
@@ -138,28 +138,28 @@ export abstract class Item extends THREE.Mesh {
     }
 
     /** Subclass can define to take action after a resize. */
-    protected abstract resized();
+    protected abstract resized(): void;
 
     /** */
-    public getHeight = function () {
+    public getHeight = function (this: Item): number {
       return this.halfSize.y * 2.0;
     }
 
     /** */
-    public getWidth = function () {
+    public getWidth = function (this: Item): number {
       return this.halfSize.x * 2.0;
     }
 
     /** */
-    public getDepth = function () {
+    public getDepth = function (this: Item): number {
       return this.halfSize.z * 2.0;
     }
 
     /** */
-    public abstract placeInRoom();
+    public abstract placeInRoom(): void;
 
     /** */
-    public initObject = function () {
+    public initObject = function (this: Item): void {
       console.log('Item initObject called', {
         position: this.position,
         halfSize: this.halfSize,
@@ -215,12 +215,12 @@ export abstract class Item extends THREE.Mesh {
     };
 
     /** intersection has attributes point (vec3) and object (THREE.Mesh) */
-    public clickPressed(intersection) {
+    public clickPressed(intersection: THREE.Intersection): void {
       this.dragOffset.copy(intersection.point).sub(this.position);
     };
 
     /** */
-    public clickDragged(intersection) {
+    public clickDragged(intersection: THREE.Intersection | null): void {
       if (intersection) {
         this.moveToPosition(
           intersection.point.sub(this.dragOffset),
@@ -229,7 +229,7 @@ export abstract class Item extends THREE.Mesh {
     };
 
     /** */
-    public rotate(intersection) {
+    public rotate(intersection: THREE.Intersection | null): void {
       if (intersection) {
         var angle = Utils.angle(
           0,
@@ -252,7 +252,7 @@ export abstract class Item extends THREE.Mesh {
     }
 
     /** */
-    public moveToPosition(vec3, intersection) {
+    public moveToPosition(vec3: THREE.Vector3, intersection: THREE.Intersection | null): void {
       this.position.copy(vec3);
     }
 
@@ -267,18 +267,18 @@ export abstract class Item extends THREE.Mesh {
      * Returns an array of planes to use other than the ground plane
      * for passing intersection to clickPressed and clickDragged
      */
-    public customIntersectionPlanes() {
+    public customIntersectionPlanes(): THREE.Mesh[] {
       return [];
     }
 
-    /** 
+    /**
      * returns the 2d corners of the bounding polygon
-     * 
+     *
      * offset is Vector3 (used for getting corners of object at a new position)
-     * 
+     *
      * TODO: handle rotated objects better!
      */
-    public getCorners(xDim, yDim, position) {
+    public getCorners(xDim: string, yDim: string, position?: THREE.Vector3): { x: number; y: number }[] {
 
       position = position || this.position;
 
@@ -319,10 +319,10 @@ export abstract class Item extends THREE.Mesh {
     }
 
     /** */
-    public abstract isValidPosition(vec3): boolean;
+    public abstract isValidPosition(vec3: THREE.Vector3): boolean;
 
     /** */
-    public showError(vec3) {
+    public showError(vec3?: THREE.Vector3): void {
       vec3 = vec3 || this.position;
       if (!this.error) {
         this.error = true;
@@ -348,7 +348,7 @@ export abstract class Item extends THREE.Mesh {
     }
 
     /** */
-    public createGlow(color, opacity, ignoreDepth): THREE.Mesh {
+    public createGlow(color: number, opacity?: number, ignoreDepth?: boolean): THREE.Mesh {
       ignoreDepth = ignoreDepth || false
       opacity = opacity || 0.2;
       var glowMaterial = new THREE.MeshBasicMaterial({

@@ -94,8 +94,8 @@ export class Controls {
     this.domElement = domElement !== undefined ? domElement : document;
 
     this.domElement.addEventListener('contextmenu', (event) => event.preventDefault(), false);
-    this.domElement.addEventListener('mousedown', this.onMouseDown.bind(this), false);
-    this.domElement.addEventListener('mousewheel', this.onMouseWheel.bind(this), false);
+    this.domElement.addEventListener('mousedown', this.onMouseDown.bind(this) as EventListener, false);
+    this.domElement.addEventListener('mousewheel', this.onMouseWheel.bind(this) as EventListener, false);
     this.domElement.addEventListener('DOMMouseScroll', this.onMouseWheel.bind(this), false); // firefox
     this.domElement.addEventListener('touchstart', this.touchstart.bind(this) as EventListener, false);
     this.domElement.addEventListener('touchend', this.touchend.bind(this) as EventListener, false);
@@ -165,12 +165,13 @@ export class Controls {
 
     if ('fov' in this.object) {
       // perspective
-      const position = this.object.position;
+      const perspectiveCamera = this.object as THREE.PerspectiveCamera;
+      const position = perspectiveCamera.position;
       const offset = position.clone().sub(this.target);
       let targetDistance = offset.length();
 
       // half of the fov is center to top of screen
-      targetDistance *= Math.tan((this.object.fov / 2) * Math.PI / 180.0);
+      targetDistance *= Math.tan((perspectiveCamera.fov / 2) * Math.PI / 180.0);
       // we actually don't use screenWidth, since perspective camera is fixed to screen height
       this.panLeft(2 * delta.x * targetDistance / element.clientHeight);
       this.panUp(2 * delta.y * targetDistance / element.clientHeight);
@@ -290,8 +291,8 @@ export class Controls {
     }
 
     // Greggman fix: https://github.com/greggman/three.js/commit/fde9f9917d6d8381f06bf22cdff766029d1761be
-    this.domElement.addEventListener('mousemove', this.onMouseMove.bind(this), false);
-    this.domElement.addEventListener('mouseup', this.onMouseUp.bind(this), false);
+    this.domElement.addEventListener('mousemove', this.onMouseMove.bind(this) as EventListener, false);
+    this.domElement.addEventListener('mouseup', this.onMouseUp.bind(this) as EventListener, false);
   }
 
   private onMouseMove(event: MouseEvent): void {
@@ -347,8 +348,8 @@ export class Controls {
     if (this.enabled === false) return;
 
     // Greggman fix: https://github.com/greggman/three.js/commit/fde9f9917d6d8381f06bf22cdff766029d1761be
-    this.domElement.removeEventListener('mousemove', this.onMouseMove.bind(this), false);
-    this.domElement.removeEventListener('mouseup', this.onMouseUp.bind(this), false);
+    this.domElement.removeEventListener('mousemove', this.onMouseMove.bind(this) as EventListener, false);
+    this.domElement.removeEventListener('mouseup', this.onMouseUp.bind(this) as EventListener, false);
 
     this.state = STATE.NONE;
   }

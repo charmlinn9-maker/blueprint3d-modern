@@ -4,7 +4,7 @@ import { Edge } from './edge';
 import type { Floorplan as FloorplanModel } from '../model/floorplan';
 import type { Controls } from './controls';
 
-export class Floorplan {
+export class FloorplanThree {
   public readonly scene: THREE.Scene;
   public readonly floorplan: FloorplanModel;
   public readonly controls: Controls;

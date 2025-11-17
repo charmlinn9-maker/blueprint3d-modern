@@ -77,6 +77,18 @@ export class Floorplanner {
   /** */
   private pixelsPerCm: number;
 
+  /** Add a callback for mode reset */
+  public addModeResetCallback(callback: (mode: number) => void): void {
+    this.modeResetCallbacks.push(callback);
+  }
+
+  /** Provides jQuery-style Callbacks API for backward compatibility */
+  public get modeResetCallbacksAPI() {
+    return {
+      add: (callback: (mode: number) => void) => this.addModeResetCallback(callback)
+    };
+  }
+
   /** */
   constructor(canvas: string, private floorplan: Floorplan) {
 

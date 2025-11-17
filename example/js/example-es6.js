@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import * as THREE from 'three';
 import { Blueprint3d } from '../../src/blueprint3d';
+import { floorplannerModes } from '../../src/floorplanner/floorplanner_view';
 
 /*
  * Camera Buttons
@@ -415,20 +416,20 @@ class ViewerFloorplanner {
     this.handleWindowResize();
 
     // mode buttons
-    this.floorplanner.modeResetCallbacks.add((mode) => {
+    this.floorplanner.modeResetCallbacksAPI.add((mode) => {
       $(this.draw).removeClass(this.activeStyle);
       $(this.remove).removeClass(this.activeStyle);
       $(this.move).removeClass(this.activeStyle);
 
-      if (mode === BP3D.Floorplanner.floorplannerModes.MOVE) {
+      if (mode === floorplannerModes.MOVE) {
         $(this.move).addClass(this.activeStyle);
-      } else if (mode === BP3D.Floorplanner.floorplannerModes.DRAW) {
+      } else if (mode === floorplannerModes.DRAW) {
         $(this.draw).addClass(this.activeStyle);
-      } else if (mode === BP3D.Floorplanner.floorplannerModes.DELETE) {
+      } else if (mode === floorplannerModes.DELETE) {
         $(this.remove).addClass(this.activeStyle);
       }
 
-      if (mode === BP3D.Floorplanner.floorplannerModes.DRAW) {
+      if (mode === floorplannerModes.DRAW) {
         $("#draw-walls-hint").show();
         this.handleWindowResize();
       } else {
@@ -437,15 +438,15 @@ class ViewerFloorplanner {
     });
 
     $(this.move).click(() => {
-      this.floorplanner.setMode(BP3D.Floorplanner.floorplannerModes.MOVE);
+      this.floorplanner.setMode(floorplannerModes.MOVE);
     });
 
     $(this.draw).click(() => {
-      this.floorplanner.setMode(BP3D.Floorplanner.floorplannerModes.DRAW);
+      this.floorplanner.setMode(floorplannerModes.DRAW);
     });
 
     $(this.remove).click(() => {
-      this.floorplanner.setMode(BP3D.Floorplanner.floorplannerModes.DELETE);
+      this.floorplanner.setMode(floorplannerModes.DELETE);
     });
   }
 

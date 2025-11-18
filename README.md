@@ -1,88 +1,101 @@
-## See it
+# Blueprint3D
 
-This repository includes an example application built using blueprint3d:
+A modernized 3D interior design application built on Three.js that allows users to create floor plans and design interior spaces.
 
-### http://furnishup.github.io/blueprint3d/example/
+This project is a comprehensive modernization of [furnishup/blueprint3d](https://github.com/furnishup/blueprint3d), originally created 9 years ago.
 
-## What is this?
+## Features
 
-This is a customizable application built on three.js that allows users to design an interior space such as a home or apartment. Below are screenshots from our Example App (link above). 
-
-1) Create 2D floorplan:
+- **2D Floor Planning**: Create and edit floor plans with walls, doors, and windows
+- **3D Visualization**: Real-time 3D rendering of interior spaces
+- **Item Placement**: Add and arrange furniture and decorative items
+- **Interactive Design**: Modify layouts and items in both 2D and 3D views
 
 ![floorplan](https://s3.amazonaws.com/furnishup/floorplan.png)
-
-2) Add items:
-
-![add_items](https://s3.amazonaws.com/furnishup/add_items.png)
-
-3) Design in 3D:
-
 ![3d_design](https://s3.amazonaws.com/furnishup/design.png)
 
-## Developing and Running Locally
+## Modernization Updates
 
-To get started, clone the repository and ensure you npm >= 3 and grunt installed, then run:
+This fork includes significant modernization from the original project:
 
-    npm install
-    grunt
+- **Three.js**: Upgraded from r69 to r181
+- **Modern JavaScript**: Migrated to ES6+ syntax with TypeScript support
+- **Build System**: Replaced Grunt with Vite for faster development
+- **Dependencies**: Removed jQuery dependency from core
+- **Code Quality**: Refactored with modern patterns and conventions
 
-The latter command generates `example/js/blueprint3d.js` from `src`.
+## Getting Started
 
-The easiest way to run locally is to run a local server from the `example` directory. There are plenty of options. One uses Python's built in webserver:
+### Prerequisites
 
-    cd example
+- Node.js >= 18
+- pnpm
 
-    # Python 2.x
-    python -m SimpleHTTPServer
+### Installation
 
-    # Python 3.x
-    python -m http.server
+```bash
+pnpm install
+```
 
-Then, visit `http://localhost:8000` in your browser.
+### Development
 
-## Contribute!
+Start the development server:
 
-This project requires a lot more work. In general, it was rushed through various prototype stages, and never refactored as much as it probably should be. We need your help!
+```bash
+pnpm dev
+```
 
-Please contact us if you are interested in contributing.
+The application will open at `http://localhost:3000`
 
-### Todos
+### Build
 
-- More complete documentation (based on the TypeDoc comments)
-- Test suite (e.g. jasmine)
-- Make it easier to build a complete application using blueprint3d (cleaner API, more inclusive base, easier integration with a backend)
-- Better serialization format for saving/loading "designs"
-- Remove the dependency on jquery from the core source!
-- Better use of npm conventions and packaging
-- Various bug fixes
-- refactor three/* - use of classes, lambdas
-- update to current threejs
-- introduce a more formal persistency format
-- put all relevant settings into Core.Configuration to make them read-/writeable, User settings?
-- complete type docs for all entities
-- there're a few TODO_Ekki's left, kill them all
+Build for production:
 
-## Directory Structure
+```bash
+pnpm build:modern
+```
 
-### `src/` Directory
+The output will be in the `dist` directory.
 
-The `src` directory contains the core of the project. Here is a description of the various sub-directories:
+### Preview Production Build
 
-`core` - Basic utilities such as logging and generic functions
+```bash
+pnpm preview
+```
 
-`floorplanner` - 2D view/controller for editing the floorplan
+## Project Structure
 
-`items` - Various types of items that can go in rooms
+```
+blueprint3d/
+├── src/              # Core library source code
+│   ├── core/         # Utilities and configuration
+│   ├── floorplanner/ # 2D floor plan editor
+│   ├── items/        # Furniture and item types
+│   ├── model/        # Data models for floorplan and items
+│   └── three/        # 3D rendering and controls
+├── example/          # Demo application
+│   ├── index.html    # Entry point
+│   ├── js/           # Application scripts
+│   ├── models/       # 3D model assets
+│   └── textures/     # Texture assets
+└── dist/             # Production build output
+```
 
-`model` - Data model representing both the 2D floorplan and all of the items in it
+## Development Workflow
 
-`three` - 3D view/controller for viewing and modifying item placement
+1. **Install dependencies**: `pnpm install`
+2. **Start dev server**: `pnpm dev`
+3. **Make changes**: Edit files in `src/` or `example/`
+4. **Test changes**: Changes will hot-reload in the browser
+5. **Build for production**: `pnpm build:modern`
 
+## Legacy Build
 
-### `example/` Directory
+The project still includes the original Grunt build system for compatibility:
 
-The example directory contains an application built using the core blueprint3d javascript building blocks. It adds html, css, models, textures, and more javascript to tie everything together.
+```bash
+pnpm build:old
+```
 
 ## License
 

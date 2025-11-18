@@ -49,8 +49,12 @@ export default defineConfig({
     outDir: resolve(__dirname, 'dist'),
     emptyOutDir: true,
     rollupOptions: {
-      input: {
-        main: resolve(__dirname, 'example/index.html')
+      input: resolve(__dirname, 'example/index.html'),
+      output: {
+        // Preserve the directory structure
+        assetFileNames: 'assets/[name]-[hash][extname]',
+        chunkFileNames: 'assets/[name]-[hash].js',
+        entryFileNames: 'assets/[name]-[hash].js',
       }
     }
   }

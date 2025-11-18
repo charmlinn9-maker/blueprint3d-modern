@@ -40,6 +40,11 @@ jobs:
         env:
           NODE_ENV: production
 
+      - name: Move index.html to root
+        run: |
+          mv dist/example/index.html dist/index.html
+          rm -rf dist/example
+
       - name: List build output
         run: ls -la dist
 

@@ -28,8 +28,8 @@ export abstract class Item extends THREE.Mesh {
     /** */
     private error = false;
 
-    /** Adjusted for Three.js r181 color space */
-    private emissiveColor = 0x222222;
+    /** */
+    private emissiveColor = 0x444444;
 
     /** */
     private errorColor = 0xff0000;
@@ -186,6 +186,10 @@ export abstract class Item extends THREE.Mesh {
       materials.forEach((material) => {
         if ('emissive' in material && material.emissive) {
           (material as any).emissive.setHex(hex);
+          // Increase emissive intensity for Three.js r181
+          if ('emissiveIntensity' in material) {
+            (material as any).emissiveIntensity = on ? 2.0 : 1.0;
+          }
         }
       });
     }

@@ -89,6 +89,39 @@ blueprint3d/
 4. **Test changes**: Changes will hot-reload in the browser
 5. **Build for production**: `pnpm build:modern`
 
+## Deploy to GitHub Pages
+
+### Automatic Deployment
+
+This project is configured to automatically deploy to GitHub Pages when you push to the `main` branch.
+
+**Setup Steps:**
+
+1. Go to your GitHub repository settings
+2. Navigate to **Pages** section (Settings → Pages)
+3. Under **Build and deployment**, select:
+   - **Source**: GitHub Actions
+4. Push your changes to the `main` branch
+5. The site will be available at: `https://yourusername.github.io/blueprint3d/`
+
+The GitHub Actions workflow (`.github/workflows/deploy.yml`) will automatically:
+- Install dependencies with pnpm
+- Build the project
+- Deploy to GitHub Pages
+
+### Manual Deployment
+
+If you prefer to deploy manually:
+
+```bash
+# Build the project
+pnpm build:modern
+
+# Deploy the dist folder to gh-pages branch
+# (requires gh-pages package: pnpm add -D gh-pages)
+npx gh-pages -d dist
+```
+
 ## Legacy Build
 
 The project still includes the original Grunt build system for compatibility:

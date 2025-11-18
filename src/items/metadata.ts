@@ -1,14 +1,14 @@
 /** Meta data for items. */
 export interface Metadata {
   /** Name of the item. */
-  itemName?: string;
+  itemName?: string
 
   /** Type of the item. */
-  itemType?: number;
+  itemType?: number
 
   /** Url of the model. */
-  modelUrl?: string;
+  modelUrl?: string
 
   /** Resizeable or not */
-  resizable?: boolean;
+  resizable?: boolean
 }

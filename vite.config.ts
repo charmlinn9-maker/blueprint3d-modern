@@ -1,11 +1,11 @@
-import { defineConfig } from 'vite';
-import { resolve } from 'path';
-import { viteStaticCopy } from 'vite-plugin-static-copy';
+import { defineConfig } from 'vite'
+import { resolve } from 'path'
+import { viteStaticCopy } from 'vite-plugin-static-copy'
 
 export default defineConfig({
   base: process.env.NODE_ENV === 'production' ? '/blueprint3d-modern/' : '/',
   root: './',
-  publicDir: false,  // Disable default public dir handling
+  publicDir: false, // Disable default public dir handling
   plugins: [
     viteStaticCopy({
       targets: [
@@ -54,8 +54,8 @@ export default defineConfig({
         // Preserve the directory structure
         assetFileNames: 'assets/[name]-[hash][extname]',
         chunkFileNames: 'assets/[name]-[hash].js',
-        entryFileNames: 'assets/[name]-[hash].js',
+        entryFileNames: 'assets/[name]-[hash].js'
       }
     }
   }
-});
+})

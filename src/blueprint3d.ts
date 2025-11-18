@@ -1,43 +1,41 @@
-import { Model } from './model/model';
-import { Floorplanner } from './floorplanner/floorplanner';
-import { Main } from './three/main';
+import { Model } from './model/model'
+import { Floorplanner } from './floorplanner/floorplanner'
+import { Main } from './three/main'
 
 /** Startup options. */
 export interface Options {
   /** */
-  widget?: boolean;
+  widget?: boolean
 
   /** */
-  threeElement?: string;
+  threeElement?: string
 
   /** */
-  floorplannerElement?: string;
+  floorplannerElement?: string
 
   /** The texture directory. */
-  textureDir?: string;
+  textureDir?: string
 }
 
 /** Blueprint3D core application. */
 export class Blueprint3d {
+  private model: Model
 
-  private model: Model;
+  private three: any // Main;
 
-  private three: any; // Main;
-
-  private floorplanner?: Floorplanner;
+  private floorplanner?: Floorplanner
 
   /** Creates an instance.
    * @param options The initialization options.
    */
   constructor(options: Options) {
-    this.model = new Model(options.textureDir || '');
-    this.three = new Main(this.model, options.threeElement || document.body, undefined, {});
+    this.model = new Model(options.textureDir || '')
+    this.three = new Main(this.model, options.threeElement || document.body, undefined, {})
 
     if (!options.widget) {
-      this.floorplanner = new Floorplanner(options.floorplannerElement || '', this.model.floorplan);
-    }
-    else {
-      this.three.getController().enabled = false;
+      this.floorplanner = new Floorplanner(options.floorplannerElement || '', this.model.floorplan)
+    } else {
+      this.three.getController().enabled = false
     }
   }
 }

@@ -38,7 +38,7 @@ export enum ELogLevel {
 }
 
 /** The current log context. To be set when initializing the Application. */
-export let logContext: ELogContext = ELogContext.None;
+export let logContext: ELogContext = ELogContext.None
 
 /** Pre-check if logging for specified context and/or level is enabled.
  * This may be used to avoid compilation of complex logs.
@@ -47,9 +47,13 @@ export let logContext: ELogContext = ELogContext.None;
  * @returns If this context/levels is currently logged.
  */
 export function isLogging(context: ELogContext, level: ELogLevel) {
-  return logContext === ELogContext.All || logContext == context
-    || level === ELogLevel.Warning || level === ELogLevel.Error
-    || level === ELogLevel.Fatal
+  return (
+    logContext === ELogContext.All ||
+    logContext == context ||
+    level === ELogLevel.Warning ||
+    level === ELogLevel.Error ||
+    level === ELogLevel.Fatal
+  )
 }
 
 /** Log the passed message in the context and with given level.
@@ -59,27 +63,27 @@ export function isLogging(context: ELogContext, level: ELogLevel) {
  */
 export function log(context: ELogContext, level: ELogLevel, message: string) {
   if (isLogging(context, level) === false) {
-    return;
+    return
   }
 
-  let tPrefix = "";
+  let tPrefix = ''
   switch (level) {
     case ELogLevel.Information:
-      tPrefix = "[INFO_] ";
-      break;
+      tPrefix = '[INFO_] '
+      break
     case ELogLevel.Warning:
-      tPrefix = "[WARNG] ";
-      break;
+      tPrefix = '[WARNG] '
+      break
     case ELogLevel.Error:
-      tPrefix = "[ERROR] ";
-      break;
+      tPrefix = '[ERROR] '
+      break
     case ELogLevel.Fatal:
-      tPrefix = "[FATAL] ";
-      break;
+      tPrefix = '[FATAL] '
+      break
     case ELogLevel.Debug:
-      tPrefix = "[DEBUG] ";
-      break;
+      tPrefix = '[DEBUG] '
+      break
   }
 
-  console.log(tPrefix + message);
+  console.log(tPrefix + message)
 }

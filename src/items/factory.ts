@@ -1,13 +1,13 @@
-import type { Item } from './item';
-import type { Model } from '../model/model';
-import type { Metadata } from './metadata';
-import * as THREE from 'three';
-import { FloorItem } from './floor_item';
-import { InWallFloorItem } from './in_wall_floor_item';
-import { InWallItem } from './in_wall_item';
-import { OnFloorItem } from './on_floor_item';
-import { WallFloorItem } from './wall_floor_item';
-import { WallItem } from './wall_item';
+import type { Item } from './item'
+import type { Model } from '../model/model'
+import type { Metadata } from './metadata'
+import * as THREE from 'three'
+import { FloorItem } from './floor_item'
+import { InWallFloorItem } from './in_wall_floor_item'
+import { InWallItem } from './in_wall_item'
+import { OnFloorItem } from './on_floor_item'
+import { WallFloorItem } from './wall_floor_item'
+import { WallItem } from './wall_item'
 
 /** Item constructor type */
 type ItemConstructor = new (
@@ -18,7 +18,7 @@ type ItemConstructor = new (
   position?: THREE.Vector3,
   rotation?: number,
   scale?: THREE.Vector3
-) => Item;
+) => Item
 
 /** Enumeration of item types. */
 const item_types: Record<number, ItemConstructor> = {
@@ -28,7 +28,7 @@ const item_types: Record<number, ItemConstructor> = {
   7: InWallFloorItem,
   8: OnFloorItem,
   9: WallFloorItem
-};
+}
 
 /** Factory class to create items. */
 export class Factory {

@@ -1,10 +1,29 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
+import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 export default defineConfig({
   base: process.env.NODE_ENV === 'production' ? '/blueprint3d/' : '/',
   root: './example',
   publicDir: false,  // Disable default public dir handling
+  plugins: [
+    viteStaticCopy({
+      targets: [
+        {
+          src: 'js/*',
+          dest: 'js'
+        },
+        {
+          src: 'models/*',
+          dest: 'models'
+        },
+        {
+          src: 'rooms/*',
+          dest: 'rooms'
+        }
+      ]
+    })
+  ],
   server: {
     port: 3000,
     open: '/index.html',

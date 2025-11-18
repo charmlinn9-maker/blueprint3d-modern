@@ -40,6 +40,34 @@ This fork includes significant modernization from the original project:
 - **Dependencies**: Removed jQuery dependency from core
 - **Code Quality**: Refactored with modern patterns and conventions
 
+## Demos
+
+This project includes two demo applications:
+
+### Vite Demo (Original)
+- **Location**: `example/` directory
+- **Tech Stack**: Vanilla JavaScript/TypeScript + Vite
+- **Features**: Lightweight, fast development with HMR
+- **Use Case**: Simple integration example
+
+### Next.js Demo (Modern)
+- **Location**: `app/` directory
+- **Tech Stack**:
+  - **Framework**: Next.js 16 with App Router
+  - **React**: React 19 with Server/Client Components
+  - **Styling**: Tailwind CSS 4 with PostCSS
+  - **Build Tool**: Turbopack (Next.js built-in)
+  - **3D Engine**: Three.js 0.181
+  - **UI Components**: Custom components with Lucide icons
+  - **TypeScript**: Full type safety
+- **Features**:
+  - Modern React architecture with hooks
+  - Component-based UI (Sidebar, Controls, Context Menu)
+  - Responsive design with Tailwind CSS
+  - Server-side rendering ready
+  - Hot module replacement with Turbopack
+- **Use Case**: Production-ready application template
+
 ## Getting Started
 
 ### Prerequisites
@@ -55,15 +83,29 @@ pnpm install
 
 ### Development
 
-Start the development server:
+#### Option 1: Vite Demo (Original)
+
+Start the Vite development server:
 
 ```bash
 pnpm dev
 ```
 
+The application will open at `http://localhost:5173`
+
+#### Option 2: Next.js Demo (Modern)
+
+Start the Next.js development server with Turbopack:
+
+```bash
+pnpm dev:nextjs
+```
+
 The application will open at `http://localhost:3000`
 
 ### Build
+
+#### Build Vite Demo
 
 Build for production:
 
@@ -73,10 +115,24 @@ pnpm build:modern
 
 The output will be in the `dist` directory.
 
-### Preview Production Build
+Preview the build:
 
 ```bash
 pnpm preview
+```
+
+#### Build Next.js Demo
+
+Build Next.js for production:
+
+```bash
+pnpm build:nextjs
+```
+
+Start the production server:
+
+```bash
+pnpm start:nextjs
 ```
 
 ## Project Structure
@@ -89,13 +145,47 @@ blueprint3d/
 │   ├── items/        # Furniture and item types
 │   ├── model/        # Data models for floorplan and items
 │   └── three/        # 3D rendering and controls
-├── example/          # Demo application
+├── example/          # Vite demo application
 │   ├── index.html    # Entry point
 │   ├── js/           # Application scripts
 │   ├── models/       # 3D model assets
 │   └── textures/     # Texture assets
-└── dist/             # Production build output
+├── app/              # Next.js demo application
+│   ├── app/          # Next.js app directory
+│   │   ├── layout.tsx    # Root layout
+│   │   ├── page.tsx      # Home page
+│   │   └── globals.css   # Global styles
+│   ├── components/   # React components
+│   │   ├── ui/           # UI components (Button, Input)
+│   │   ├── Blueprint3DApp.tsx      # Main app component
+│   │   ├── Sidebar.tsx             # Sidebar with controls
+│   │   ├── MainControls.tsx        # Main toolbar
+│   │   ├── FloorplannerControls.tsx # 2D editor controls
+│   │   ├── CameraControls.tsx      # 3D view controls
+│   │   ├── ItemsList.tsx           # Furniture items list
+│   │   ├── TextureSelector.tsx     # Wall/floor texture picker
+│   │   └── ContextMenu.tsx         # Right-click menu
+│   ├── lib/          # Utilities
+│   ├── public/       # Static assets
+│   │   ├── models/       # 3D models and thumbnails
+│   │   ├── rooms/        # Room textures
+│   │   └── constants/    # Configuration files
+│   └── next.config.ts    # Next.js configuration
+├── dist/             # Vite production build output
+└── legacy/           # Original blueprint3d code
 ```
+
+## TODO
+
+- [ ] **Support GLB/GLTF Import**  
+       - Allow users to import their own 3D models into the scene  
+       - Support scaling, rotation, and material adjustments
+
+- [ ] **Unit Conversion & Display**  
+       - Allow switching between units (meters, centimeters, feet, inches)
+
+- [ ] **Local History / Undo-Redo**  
+       - Save the current floor plan and 3D scene locally
 
 ## Development Workflow
 
@@ -121,6 +211,7 @@ This project is configured to automatically deploy to GitHub Pages when you push
 5. The site will be available at: `https://yourusername.github.io/repository-name/`
 
 The GitHub Actions workflow (`.github/workflows/deploy.yml`) will automatically:
+
 - Install dependencies with pnpm
 - Build the project
 - Deploy to GitHub Pages

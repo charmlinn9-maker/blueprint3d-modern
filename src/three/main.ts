@@ -290,11 +290,13 @@ export class Main {
       const center = this.model.floorplan.getCenter()
       const size = this.model.floorplan.getSize()
       const maxDim = Math.max(size.x, size.z)
-      const distance = maxDim * 1.2
+      // Increase distance to reduce perspective distortion and wall blocking
+      const distance = maxDim * 1.5 // Increased from 1.2 to 2.0
 
       this.controls.target.copy(center)
       this.controls.target.y = 0
 
+      // Keep camera directly overhead for true top-down view
       this.camera.position.set(center.x, distance, center.z)
 
       // Disable rotation in 2D mode

@@ -72,14 +72,8 @@ export class Controller {
 
   // invoked via callback when item is loaded
   private itemLoaded(item: Item): void {
-    if (!item.position_set) {
-      this.setSelectedObject(item)
-      this.switchState(ControllerState.DRAGGING)
-      const pos = item.position.clone()
-      pos.y = 0
-      const vec = this.three.projectVector(pos)
-      this.clickPressed(vec)
-    }
+    // Just mark position as set, don't auto-drag the item
+    // User needs to manually click to move it
     item.position_set = true
   }
 

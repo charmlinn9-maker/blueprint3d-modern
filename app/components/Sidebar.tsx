@@ -4,8 +4,8 @@ import { ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface SidebarProps {
-  activeTab: 'floorplan' | 'design' | 'items'
-  onTabChange: (tab: 'floorplan' | 'design' | 'items') => void
+  activeTab: 'floorplan' | 'design' | 'items' | 'settings'
+  onTabChange: (tab: 'floorplan' | 'design' | 'items' | 'settings') => void
   children?: React.ReactNode
 }
 
@@ -14,6 +14,7 @@ export function Sidebar({ activeTab, onTabChange, children }: SidebarProps) {
     { id: 'floorplan' as const, label: 'Edit Floorplan' },
     { id: 'design' as const, label: 'Design' },
     { id: 'items' as const, label: 'Add Items' },
+    { id: 'settings' as const, label: 'Settings' },
   ]
 
   return (

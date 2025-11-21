@@ -8,6 +8,7 @@ import { MainControls } from './MainControls'
 import { FloorplannerControls } from './FloorplannerControls'
 import { ItemsList } from './ItemsList'
 import { TextureSelector } from './TextureSelector'
+import { Settings } from './Settings'
 import DefaultFloorplan from '@/public/constants/default.json'
 import ExampleFloorplan from '@/public/constants/example.json'
 
@@ -15,13 +16,15 @@ import ExampleFloorplan from '@/public/constants/example.json'
 import { Blueprint3d } from '@src/blueprint3d'
 // @ts-ignore
 import { floorplannerModes } from '@src/floorplanner/floorplanner_view'
+// @ts-ignore
+import { Configuration, configDimUnit } from '@src/core/configuration'
 
 export function Blueprint3DApp() {
   const viewerRef = useRef<HTMLDivElement>(null)
   const floorplannerCanvasRef = useRef<HTMLCanvasElement>(null)
   const blueprint3dRef = useRef<any>(null)
 
-  const [activeTab, setActiveTab] = useState<'floorplan' | 'design' | 'items'>('design')
+  const [activeTab, setActiveTab] = useState<'floorplan' | 'design' | 'items' | 'settings'>('design')
   const [selectedItem, setSelectedItem] = useState<any>(null)
   const [floorplannerMode, setFloorplannerMode] = useState<'move' | 'draw' | 'delete'>('move')
   const [textureType, setTextureType] = useState<'floor' | 'wall' | null>(null)
@@ -31,6 +34,12 @@ export function Blueprint3DApp() {
   // Initialize Blueprint3d
   useEffect(() => {
     if (!viewerRef.current || blueprint3dRef.current) return
+
+    // Load saved dimension unit from localStorage
+    const savedUnit = localStorage.getItem('dimensionUnit')
+    if (savedUnit) {
+      Configuration.setValue(configDimUnit, savedUnit)
+    }
 
     const opts = {
       floorplannerElement: 'floorplanner-canvas',
@@ -198,8 +207,17 @@ export function Blueprint3DApp() {
     reader.readAsText(files[0])
   }, [])
 
+  // Handle unit change
+  const handleUnitChange = useCallback((unit: string) => {
+    Configuration.setValue(configDimUnit, unit)
+    // Force floorplanner to redraw with new units
+    if (blueprint3dRef.current && activeTab === 'floorplan') {
+      blueprint3dRef.current.floorplanner.reset()
+    }
+  }, [activeTab])
+
   // Tab change
-  const handleTabChange = useCallback((tab: 'floorplan' | 'design' | 'items') => {
+  const handleTabChange = useCallback((tab: 'floorplan' | 'design' | 'items' | 'settings') => {
     setActiveTab(tab)
     setTextureType(null)
 
@@ -355,6 +373,19 @@ export function Blueprint3DApp() {
           style={{ display: activeTab === 'items' ? 'block' : 'none' }}
         >
           {activeTab === 'items' && <ItemsList onItemSelect={handleItemSelect} />}
+        </div>
+
+        {/* Settings */}
+        <div
+          id="settings"
+          className="w-full h-full overflow-y-auto p-10 bg-gray-50"
+          style={{ display: activeTab === 'settings' ? 'block' : 'none' }}
+        >
+          {activeTab === 'settings' && (
+            <div className="max-w-2xl mx-auto">
+              <Settings onUnitChange={handleUnitChange} />
+            </div>
+          )}
         </div>
       </div>
     </div>

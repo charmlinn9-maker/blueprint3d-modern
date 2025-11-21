@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react'
 import { Trash2 } from 'lucide-react'
 import { Button } from './ui/Button'
 import { Input } from './ui/Input'
+// @ts-ignore
+import { Configuration, configDimUnit } from '@src/core/configuration'
 
 interface ContextMenuProps {
   selectedItem: any | null
@@ -22,15 +24,82 @@ export function ContextMenu({
   const [height, setHeight] = useState(0)
   const [depth, setDepth] = useState(0)
   const [fixed, setFixed] = useState(false)
+  const [currentUnit, setCurrentUnit] = useState('inch')
 
-  const cmToIn = (cm: number) => cm / 2.54
-  const inToCm = (inches: number) => inches * 2.54
+  // Convert cm to display unit
+  const cmToDisplay = (cm: number, unit: string): number => {
+    switch (unit) {
+      case 'inch':
+        return cm / 2.54
+      case 'm':
+        return cm / 100
+      case 'cm':
+        return cm
+      case 'mm':
+        return cm * 10
+      default:
+        return cm / 2.54
+    }
+  }
+
+  // Convert display unit to cm
+  const displayToCm = (value: number, unit: string): number => {
+    switch (unit) {
+      case 'inch':
+        return value * 2.54
+      case 'm':
+        return value * 100
+      case 'cm':
+        return value
+      case 'mm':
+        return value / 10
+      default:
+        return value * 2.54
+    }
+  }
+
+  // Get unit label
+  const getUnitLabel = (unit: string): string => {
+    switch (unit) {
+      case 'inch':
+        return 'inches'
+      case 'm':
+        return 'meters'
+      case 'cm':
+        return 'centimeters'
+      case 'mm':
+        return 'millimeters'
+      default:
+        return 'inches'
+    }
+  }
+
+  // Get decimal places for unit
+  const getDecimalPlaces = (unit: string): number => {
+    switch (unit) {
+      case 'inch':
+        return 0
+      case 'm':
+        return 2
+      case 'cm':
+        return 1
+      case 'mm':
+        return 0
+      default:
+        return 0
+    }
+  }
 
   useEffect(() => {
+    // Get current unit from Configuration
+    const unit = Configuration.getStringValue(configDimUnit)
+    setCurrentUnit(unit)
+
     if (selectedItem) {
-      setWidth(Number(cmToIn(selectedItem.getWidth()).toFixed(0)))
-      setHeight(Number(cmToIn(selectedItem.getHeight()).toFixed(0)))
-      setDepth(Number(cmToIn(selectedItem.getDepth()).toFixed(0)))
+      const decimals = getDecimalPlaces(unit)
+      setWidth(Number(cmToDisplay(selectedItem.getWidth(), unit).toFixed(decimals)))
+      setHeight(Number(cmToDisplay(selectedItem.getHeight(), unit).toFixed(decimals)))
+      setDepth(Number(cmToDisplay(selectedItem.getDepth(), unit).toFixed(decimals)))
       setFixed(selectedItem.fixed || false)
     }
   }, [selectedItem])
@@ -44,7 +113,11 @@ export function ContextMenu({
     if (field === 'height') setHeight(value)
     if (field === 'depth') setDepth(value)
 
-    onResize(inToCm(newHeight), inToCm(newWidth), inToCm(newDepth))
+    onResize(
+      displayToCm(newHeight, currentUnit),
+      displayToCm(newWidth, currentUnit),
+      displayToCm(newDepth, currentUnit)
+    )
   }
 
   const handleFixedChange = (checked: boolean) => {
@@ -110,7 +183,7 @@ export function ContextMenu({
             </div>
           </div>
           <small className="text-gray-500 text-xs mt-3 block">
-            Measurements in inches.
+            Measurements in {getUnitLabel(currentUnit)}.
           </small>
         </div>
       </div>

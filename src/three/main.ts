@@ -46,6 +46,9 @@ export class Main {
   private mouseOver = false
   private hasClicked = false
   private hud!: HUD
+  private viewMode: '2d' | '3d' = '3d'
+  private saved3DPosition: THREE.Vector3 | null = null
+  private saved3DRotation: { theta: number; phi: number } | null = null
 
   constructor(
     model: Model,
@@ -268,5 +271,54 @@ export class Main {
     }
 
     return vec2
+  }
+
+  public getViewMode(): '2d' | '3d' {
+    return this.viewMode
+  }
+
+  public setViewMode(mode: '2d' | '3d'): void {
+    if (this.viewMode === mode) return
+
+    this.viewMode = mode
+
+    if (mode === '2d') {
+      // Save current 3D position
+      this.saved3DPosition = this.camera.position.clone()
+
+      // Switch to 2D top-down view
+      const center = this.model.floorplan.getCenter()
+      const size = this.model.floorplan.getSize()
+      const maxDim = Math.max(size.x, size.z)
+      const distance = maxDim * 1.2
+
+      this.controls.target.copy(center)
+      this.controls.target.y = 0
+
+      this.camera.position.set(center.x, distance, center.z)
+
+      // Disable rotation in 2D mode
+      this.controls.noRotate = true
+      this.controls.maxPolarAngle = 0
+      this.controls.minPolarAngle = 0
+
+      this.controls.update()
+    } else {
+      // Restore 3D view
+      if (this.saved3DPosition) {
+        this.camera.position.copy(this.saved3DPosition)
+      } else {
+        this.centerCamera()
+      }
+
+      // Re-enable rotation in 3D mode
+      this.controls.noRotate = false
+      this.controls.maxPolarAngle = Math.PI / 2
+      this.controls.minPolarAngle = 0
+
+      this.controls.update()
+    }
+
+    this._needsUpdate = true
   }
 }

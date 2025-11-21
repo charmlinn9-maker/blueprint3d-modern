@@ -9,6 +9,7 @@ import { FloorplannerControls } from './FloorplannerControls'
 import { ItemsList } from './ItemsList'
 import { TextureSelector } from './TextureSelector'
 import { Settings } from './Settings'
+import { ViewToggle } from './ViewToggle'
 import DefaultFloorplan from '@/public/constants/default.json'
 import ExampleFloorplan from '@/public/constants/example.json'
 
@@ -30,6 +31,7 @@ export function Blueprint3DApp() {
   const [textureType, setTextureType] = useState<'floor' | 'wall' | null>(null)
   const [currentTarget, setCurrentTarget] = useState<any>(null)
   const [itemsLoading, setItemsLoading] = useState(0)
+  const [viewMode, setViewMode] = useState<'2d' | '3d'>('3d')
 
   // Initialize Blueprint3d
   useEffect(() => {
@@ -147,6 +149,12 @@ export function Blueprint3DApp() {
         controls.panXY(-panSpeed, 0)
         break
     }
+  }, [])
+
+  const handleViewChange = useCallback((mode: '2d' | '3d') => {
+    if (!blueprint3dRef.current) return
+    blueprint3dRef.current.three.setViewMode(mode)
+    setViewMode(mode)
   }, [])
 
   // Item controls
@@ -323,6 +331,7 @@ export function Blueprint3DApp() {
           {activeTab === 'design' && (
             <>
               <MainControls onNew={handleNew} onSave={handleSave} onLoad={handleLoad} />
+              <ViewToggle viewMode={viewMode} onViewChange={handleViewChange} />
               <CameraControls
                 onZoomIn={handleZoomIn}
                 onZoomOut={handleZoomOut}

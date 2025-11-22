@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { Trash2 } from 'lucide-react'
 import { Button } from './ui/Button'
 import { Input } from './ui/Input'
+import { useTranslations } from 'next-intl'
 // @ts-ignore
 import { Configuration, configDimUnit } from '@src/core/configuration'
 
@@ -20,6 +21,7 @@ export function ContextMenu({
   onResize,
   onFixedChange,
 }: ContextMenuProps) {
+  const t = useTranslations('contextMenu')
   const [width, setWidth] = useState(0)
   const [height, setHeight] = useState(0)
   const [depth, setDepth] = useState(0)
@@ -62,15 +64,15 @@ export function ContextMenu({
   const getUnitLabel = (unit: string): string => {
     switch (unit) {
       case 'inch':
-        return 'inches'
+        return t('units.inches')
       case 'm':
-        return 'meters'
+        return t('units.meters')
       case 'cm':
-        return 'centimeters'
+        return t('units.centimeters')
       case 'mm':
-        return 'millimeters'
+        return t('units.millimeters')
       default:
-        return 'inches'
+        return t('units.inches')
     }
   }
 
@@ -142,17 +144,17 @@ export function ContextMenu({
         onClick={onDelete}
       >
         <Trash2 className="h-4 w-4" />
-        Delete Item
+        {t('deleteItem')}
       </Button>
       <br />
       <div className="border border-gray-200 rounded">
         <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
-          <h3 className="font-medium">Adjust Size</h3>
+          <h3 className="font-medium">{t('adjustSize')}</h3>
         </div>
         <div className="p-4 text-gray-900">
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <label className="w-20 text-sm">Width</label>
+              <label className="w-20 text-sm">{t('width')}</label>
               <Input
                 type="number"
                 value={width}
@@ -162,7 +164,7 @@ export function ContextMenu({
               />
             </div>
             <div className="flex items-center gap-3">
-              <label className="w-20 text-sm">Depth</label>
+              <label className="w-20 text-sm">{t('depth')}</label>
               <Input
                 type="number"
                 value={depth}
@@ -172,7 +174,7 @@ export function ContextMenu({
               />
             </div>
             <div className="flex items-center gap-3">
-              <label className="w-20 text-sm">Height</label>
+              <label className="w-20 text-sm">{t('height')}</label>
               <Input
                 type="number"
                 value={height}
@@ -183,7 +185,7 @@ export function ContextMenu({
             </div>
           </div>
           <small className="text-gray-500 text-xs mt-3 block">
-            Measurements in {getUnitLabel(currentUnit)}.
+            {t('measurementsIn')} {getUnitLabel(currentUnit)}.
           </small>
         </div>
       </div>
@@ -195,7 +197,7 @@ export function ContextMenu({
           onChange={(e) => handleFixedChange(e.target.checked)}
           className="rounded"
         />
-        <span className="text-sm">Lock in place</span>
+        <span className="text-sm">{t('lockInPlace')}</span>
       </label>
     </div>
   )

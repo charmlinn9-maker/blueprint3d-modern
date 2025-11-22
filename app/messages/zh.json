@@ -109,5 +109,20 @@
       "wallmapYellow": "黄色墙纸",
       "lightBrick": "浅色砖墙"
     }
+  },
+  "contextMenu": {
+    "deleteItem": "删除物品",
+    "adjustSize": "调整尺寸",
+    "width": "宽度",
+    "depth": "深度",
+    "height": "高度",
+    "lockInPlace": "锁定位置",
+    "measurementsIn": "测量单位",
+    "units": {
+      "inches": "英寸",
+      "meters": "米",
+      "centimeters": "厘米",
+      "millimeters": "毫米"
+    }
   }
 }

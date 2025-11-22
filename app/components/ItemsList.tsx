@@ -1,6 +1,7 @@
 'use client'
 
 import { ITEMS } from '@/lib/constants'
+import { useTranslations } from 'next-intl'
 
 interface ItemsListProps {
   onItemSelect: (item: {
@@ -11,6 +12,8 @@ interface ItemsListProps {
 }
 
 export function ItemsList({ onItemSelect }: ItemsListProps) {
+  const t = useTranslations('items')
+
   return (
     <div className="grid grid-cols-4 gap-3">
       {ITEMS.map((item, index) => (
@@ -22,11 +25,11 @@ export function ItemsList({ onItemSelect }: ItemsListProps) {
           <div className="relative w-full aspect-square">
             <img
               src={`/${item.image}`}
-              alt={item.name}
+              alt={t(item.key)}
               className="w-full h-full object-contain"
             />
           </div>
-          <span className="text-xs text-center">{item.name}</span>
+          <span className="text-xs text-center">{t(item.key)}</span>
         </button>
       ))}
     </div>

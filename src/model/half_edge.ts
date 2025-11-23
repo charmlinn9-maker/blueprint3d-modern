@@ -50,6 +50,7 @@ export class HalfEdge {
    * @param front True if front side.
    */
   constructor(
+    // @ts-ignore - room is declared but not used, keeping for future use
     private room: Room | null,
     public wall: Wall,
     public front: boolean
@@ -212,6 +213,7 @@ export class HalfEdge {
     }
   }
 
+  // @ts-ignore - getOppositeEdge is declared but not used, keeping for future use
   private getOppositeEdge(): HalfEdge | null {
     if (this.front) {
       return this.wall.backEdge

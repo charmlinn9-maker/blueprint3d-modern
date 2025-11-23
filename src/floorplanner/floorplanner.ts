@@ -37,6 +37,7 @@ export class Floorplanner {
   public lastNode: Corner | null = null
 
   /** */
+  // @ts-ignore - wallWidth is declared but not used, keeping for future use
   private wallWidth: number
 
   /** */

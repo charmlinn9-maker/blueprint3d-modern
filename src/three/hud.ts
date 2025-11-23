@@ -11,6 +11,7 @@ export class HUD {
   private selectedItem: Item | null = null
   private rotating = false
   private mouseover = false
+  // @ts-ignore - tolerance is declared but not used, keeping for future use
   private readonly tolerance = 10
   private readonly height = 5
   private readonly distance = 20

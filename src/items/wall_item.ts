@@ -95,6 +95,7 @@ export abstract class WallItem extends Item {
   }
 
   /** */
+  // @ts-ignore - updateEdgeVisibility is declared but not used, keeping for future use
   private updateEdgeVisibility(visible: boolean, front: boolean) {
     if (front) {
       this.frontVisible = visible

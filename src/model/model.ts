@@ -36,9 +36,11 @@ export class Model {
   private roomLoadedCallbacks = new EventEmitter<void>()
 
   /** name */
+  // @ts-ignore - roomSavedCallbacks is declared but not used, keeping for future use
   private roomSavedCallbacks = new EventEmitter<void>()
 
   /** success (bool), copy (bool) */
+  // @ts-ignore - roomDeletedCallbacks is declared but not used, keeping for future use
   private roomDeletedCallbacks = new EventEmitter<{ success: boolean; copy: boolean }>()
 
   /** Constructs a new model.

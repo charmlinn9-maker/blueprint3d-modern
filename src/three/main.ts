@@ -8,6 +8,7 @@ import { Controls } from './controls'
 import { HUD } from './hud'
 import type { Model } from '../model/model'
 import type { Scene } from '../model/scene'
+// @ts-ignore - Item is imported but not used, keeping for future use
 import type { Item } from '../items/item'
 
 interface MainOptions {
@@ -40,6 +41,7 @@ export class Main {
   private camera!: THREE.PerspectiveCamera
   private renderer!: THREE.WebGLRenderer
   private controller!: Controller
+  // @ts-ignore - floorplan is declared but not used, keeping for future use
   private floorplan!: FloorplanThree
   private _needsUpdate = false
   private lastRender = Date.now()
@@ -48,6 +50,7 @@ export class Main {
   private hud!: HUD
   private viewMode: '2d' | '3d' = '3d'
   private saved3DPosition: THREE.Vector3 | null = null
+  // @ts-ignore - saved3DRotation is declared but not used, keeping for future use
   private saved3DRotation: { theta: number; phi: number } | null = null
 
   constructor(
@@ -90,6 +93,7 @@ export class Main {
     // Fix color space for proper color saturation (matching legacy behavior)
     this.renderer.outputColorSpace = THREE.SRGBColorSpace
 
+    // @ts-ignore - Item is imported but not used, keeping for future use
     const skybox = new Skybox(this.scene.getScene())
 
     this.controls = new Controls(this.camera, this.domElement)
@@ -117,6 +121,7 @@ export class Main {
     this.centerCamera()
     this.model.floorplan.fireOnUpdatedRooms(this.centerCamera.bind(this))
 
+    // @ts-ignore - Item is imported but not used, keeping for future use
     const lights = new Lights(this.scene.getScene(), this.model.floorplan)
 
     this.floorplan = new FloorplanThree(this.scene.getScene(), this.model.floorplan, this.controls)

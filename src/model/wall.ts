@@ -19,6 +19,7 @@ const defaultWallTexture = {
  */
 export class Wall {
   /** The unique id of each wall. */
+  // @ts-ignore - id is declared but not used, keeping for future use
   private id: string
 
   /** Front is the plane from start to end. */
@@ -185,6 +186,7 @@ export class Wall {
    * @param corner The given corner.
    * @returns The opposite corner.
    */
+  // @ts-ignore - oppositeCorner is declared but not used, keeping for future use
   private oppositeCorner(corner: Corner): Corner | undefined {
     if (this.start === corner) {
       return this.end

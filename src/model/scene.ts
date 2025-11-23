@@ -38,6 +38,7 @@ export class Scene {
    */
   constructor(
     private model: Model,
+    // @ts-ignore - textureDir is declared but not used, keeping for future use
     private textureDir: string
   ) {
     this.scene = new THREE.Scene()

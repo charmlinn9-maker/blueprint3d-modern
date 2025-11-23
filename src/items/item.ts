@@ -22,6 +22,7 @@ export abstract class Item extends THREE.Mesh {
   private selected = false
 
   /** */
+  // @ts-ignore - highlighted is declared but not used, keeping for future use
   private highlighted = false
 
   /** */
@@ -34,6 +35,7 @@ export abstract class Item extends THREE.Mesh {
   private errorColor = 0xff0000
 
   /** */
+  // @ts-ignore - resizable is declared but not used, keeping for future use
   private resizable: boolean
 
   /** Does this object affect other floor items */

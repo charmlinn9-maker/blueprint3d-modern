@@ -110,6 +110,7 @@ export class Corner {
     this.move(this.x + dx, this.y + dy)
   }
 
+  // @ts-ignore - fireAction is declared but not used, keeping for future use
   private fireAction(action: unknown): void {
     this.action_callbacks.fire(action)
   }

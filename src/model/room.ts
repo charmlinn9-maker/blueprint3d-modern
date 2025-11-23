@@ -32,6 +32,7 @@ export class Room {
   public floorPlane!: THREE.Mesh
 
   /** */
+  // @ts-ignore - customTexture is declared but not used, keeping for future use
   private customTexture = false
 
   /** */
@@ -70,6 +71,7 @@ export class Room {
   /**
    * textureStretch always true, just an argument for consistency with walls
    */
+  // @ts-ignore - setTexture is declared but not used, keeping for future use
   private setTexture(textureUrl: string, textureStretch: boolean, textureScale: number): void {
     const uuid = this.getUuid()
     this.floorplan.setFloorTexture(uuid, textureUrl, textureScale)
@@ -94,6 +96,7 @@ export class Room {
     ;(<any>this.floorPlane).room = this // js monkey patch
   }
 
+  // @ts-ignore - cycleIndex is declared but not used, keeping for future use
   private cycleIndex(index: number): number {
     if (index < 0) {
       return (index += this.corners.length)

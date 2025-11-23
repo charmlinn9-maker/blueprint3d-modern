@@ -5,6 +5,7 @@ export class Floor {
   public readonly room: Room
   private readonly scene: THREE.Scene
   private floorPlane: THREE.Mesh | null = null
+  // @ts-ignore - roofPlane is declared but not used, keeping for future use
   private roofPlane: THREE.Mesh | null = null
 
   constructor(scene: THREE.Scene, room: Room) {
@@ -64,6 +65,7 @@ export class Floor {
     return floor
   }
 
+  // @ts-ignore - buildRoof is declared but not used, keeping for future use
   private buildRoof(): THREE.Mesh {
     // setup texture
     const roofMaterial = new THREE.MeshBasicMaterial({

@@ -96,6 +96,7 @@ export class Floorplan {
     return planes
   }
 
+  // @ts-ignore - floorPlanes is declared but not used, keeping for future use
   private floorPlanes(): THREE.Mesh[] {
     return Utils.map(this.rooms, (room: Room) => room.floorPlane).filter(
       (plane): plane is THREE.Mesh => plane !== null

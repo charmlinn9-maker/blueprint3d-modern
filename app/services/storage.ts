@@ -149,7 +149,6 @@ class IndexedDBStorageService implements IStorageService {
 }
 
 // Local Storage Implementation (Kept for backward compatibility)
-// @ts-expect-error - Keeping for potential fallback
 class LocalStorageService implements IStorageService {
   private readonly STORAGE_KEY = 'blueprint3d_floorplans'
 
@@ -235,63 +234,153 @@ class LocalStorageService implements IStorageService {
   }
 }
 
-// Remote Storage Implementation (Phase 2 - placeholder)
+// Remote Storage Implementation - Uses existing layout API
 class RemoteStorageService implements IStorageService {
   private apiUrl: string
 
-  constructor(apiUrl: string) {
+  constructor(apiUrl: string = '/api/layout') {
     this.apiUrl = apiUrl
   }
 
   async saveFloorplan(name: string, data: string, thumbnail?: string): Promise<FloorplanData> {
-    const response = await fetch(`${this.apiUrl}/floorplans`, {
+    const response = await fetch(this.apiUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, data, thumbnail }),
+      body: JSON.stringify({
+        roomName: name,
+        canvasData: JSON.parse(data), // Parse the stringified data back to object
+        previewBase64: thumbnail || '',
+      }),
     })
-    return response.json()
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ message: 'Failed to save floorplan' }))
+      throw new Error(error.message || 'Failed to save floorplan')
+    }
+
+    const result = await response.json()
+
+    // Transform API response to FloorplanData format
+    if (result.success && result.data) {
+      const apiData = result.data
+      return {
+        id: apiData.id,
+        name: apiData.name,
+        data: apiData.canvas_data,
+        thumbnail: apiData.preview_url,
+        createdAt: new Date(apiData.created_at).getTime(),
+        updatedAt: new Date(apiData.updated_at).getTime(),
+      }
+    }
+
+    throw new Error('Failed to save floorplan')
   }
 
   async getAllFloorplans(): Promise<FloorplanData[]> {
-    const response = await fetch(`${this.apiUrl}/floorplans`)
-    return response.json()
+    const response = await fetch(this.apiUrl)
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ message: 'Failed to fetch floorplans' }))
+      throw new Error(error.message || 'Failed to fetch floorplans')
+    }
+
+    const result = await response.json()
+
+    if (result.success && Array.isArray(result.data)) {
+      return result.data.map((item: any) => ({
+        id: item.id,
+        name: item.name,
+        data: item.canvas_data || '{}',
+        thumbnail: item.preview_url,
+        createdAt: new Date(item.created_at).getTime(),
+        updatedAt: new Date(item.updated_at).getTime(),
+      }))
+    }
+
+    return []
   }
 
   async getFloorplan(id: string): Promise<FloorplanData | null> {
-    const response = await fetch(`${this.apiUrl}/floorplans/${id}`)
-    if (!response.ok) return null
-    return response.json()
+    const response = await fetch(`${this.apiUrl}/${id}`)
+
+    if (!response.ok) {
+      return null
+    }
+
+    const result = await response.json()
+
+    if (result.success && result.data) {
+      const apiData = result.data
+      return {
+        id: apiData.id,
+        name: apiData.name,
+        data: apiData.canvas_data,
+        thumbnail: apiData.preview_url,
+        createdAt: new Date(apiData.created_at).getTime(),
+        updatedAt: new Date(apiData.updated_at).getTime(),
+      }
+    }
+
+    return null
   }
 
   async updateFloorplan(id: string, name: string, data: string, thumbnail?: string): Promise<FloorplanData> {
-    const response = await fetch(`${this.apiUrl}/floorplans/${id}`, {
+    const response = await fetch(`${this.apiUrl}/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, data, thumbnail }),
+      body: JSON.stringify({
+        roomName: name,
+        canvasData: JSON.parse(data),
+        previewBase64: thumbnail,
+      }),
     })
-    return response.json()
+
+    if (!response.ok) {
+      const error = await response.json()
+      throw new Error(error.message || 'Failed to update floorplan')
+    }
+
+    const result = await response.json()
+
+    if (result.success && result.data) {
+      const apiData = result.data
+      return {
+        id: apiData.id,
+        name: apiData.name,
+        data: apiData.canvas_data,
+        thumbnail: apiData.preview_url,
+        createdAt: new Date(apiData.created_at).getTime(),
+        updatedAt: new Date(apiData.updated_at).getTime(),
+      }
+    }
+
+    throw new Error('Invalid response from server')
   }
 
   async deleteFloorplan(id: string): Promise<void> {
-    await fetch(`${this.apiUrl}/floorplans/${id}`, {
+    const response = await fetch(`${this.apiUrl}/${id}`, {
       method: 'DELETE',
     })
+
+    if (!response.ok) {
+      const error = await response.json()
+      throw new Error(error.message || 'Failed to delete floorplan')
+    }
   }
 }
 
 // Factory to get the appropriate storage service
-export function getStorageService(): IStorageService {
+export function getStorageService(forceRemote?: boolean): IStorageService {
   // Check if we're in a browser environment
   if (typeof window === 'undefined') {
     throw new Error('Storage service can only be used in browser environment')
   }
 
-  // For Phase 1, use IndexedDB (better for large data)
-  // For Phase 2, check config or env variable and return RemoteStorageService
-  const useRemote = process.env.NEXT_PUBLIC_USE_REMOTE_STORAGE === 'true'
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || ''
+  // Check if remote storage should be used
+  const useRemote = forceRemote || process.env.NEXT_PUBLIC_USE_REMOTE_STORAGE === 'true'
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || '/api/layout'
 
-  if (useRemote && apiUrl) {
+  if (useRemote) {
     return new RemoteStorageService(apiUrl)
   }
 

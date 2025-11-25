@@ -511,22 +511,22 @@ export const ITEMS = [
   {
     key: 'closedDoor',
     name: 'Closed Door',
-    image: '/models/thumbnails/thumbnail_Screen_Shot_2014-10-27_at_8.04.12_PM.png',
-    model: '/models/door-1.glb',
+    image: '/models/thumbnails/DoorWindows/door-1.jpg',
+    model: 'https://cdn-images.lumenfeng.com/door-1.glb',
     type: '7'
   },
   {
     key: 'openDoor',
     name: 'Open Door',
-    image: '/models/thumbnails/thumbnail_Screen_Shot_2014-10-27_at_8.22.46_PM.png',
-    model: '/models/door-2.glb',
+    image: '/models/thumbnails/DoorWindows/door-2.jpg',
+    model: 'https://cdn-images.lumenfeng.com/door-2.glb',
     type: '7'
   },
   {
     key: 'window',
     name: 'Window',
-    image: '/models/thumbnails/thumbnail_window.png',
-    model: '/models/window-1.glb',
+    image: '/models/thumbnails/DoorWindows/window-1.jpg',
+    model: 'https://cdn-images.lumenfeng.com/window-1.glb',
     type: '3'
   }
 ]

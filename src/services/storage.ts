@@ -277,7 +277,7 @@ class RemoteStorageService implements IStorageService {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         roomName: name,
-        canvasData: data, // Original data
+        canvasData: parsedData, // Original data
         canvasDataSimplified: minifiedJSONString, // Simplified data for LLM
         previewBase64: thumbnail || ''
       })
@@ -375,7 +375,7 @@ class RemoteStorageService implements IStorageService {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         roomName: name,
-        canvasData: data, // Original data
+        canvasData: parsedData, // Original data
         canvasDataSimplified: minifiedJSONString, // Simplified data for LLM
         previewBase64: thumbnail
       })

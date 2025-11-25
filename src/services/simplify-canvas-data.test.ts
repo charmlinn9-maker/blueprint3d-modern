@@ -1,5 +1,5 @@
 // Example usage and testing for canvas data simplification
-import { simplifyCanvasData, estimateTokenSavings } from './simplify-canvas-data'
+import { simplifyCanvasData, estimateTokenSavings, toMinifiedJSON, toFormattedJSON } from './simplify-canvas-data'
 
 // Example canvas data (based on the structure you provided)
 const exampleCanvasData = {
@@ -155,11 +155,13 @@ export function testSimplification() {
 
   const simplified = simplifyCanvasData(exampleCanvasData)
   const savings = estimateTokenSavings(exampleCanvasData, simplified)
+  const minifiedJSON = toMinifiedJSON(simplified)
+  const formattedJSON = toFormattedJSON(simplified)
 
   console.log('\n📊 Token Savings:')
-  console.log(`  Original:   ${savings.originalSize.toLocaleString()} characters`)
-  console.log(`  Simplified: ${savings.simplifiedSize.toLocaleString()} characters`)
-  console.log(`  Saved:      ${savings.savings.toLocaleString()} characters (${savings.savingsPercent}% reduction)`)
+  console.log(`  Original:                ${savings.originalSize.toLocaleString()} characters`)
+  console.log(`  Simplified (formatted):  ${savings.simplifiedSize.toLocaleString()} characters (${savings.savingsPercent}% reduction)`)
+  console.log(`  Simplified (minified):   ${savings.minifiedSize.toLocaleString()} characters (${savings.minifiedSavingsPercent}% reduction)`)
 
   console.log('\n📦 Data Structure:')
   console.log(`  Materials: ${simplified.materials.length}`)
@@ -168,14 +170,24 @@ export function testSimplification() {
   console.log(`  Areas:     ${simplified.layout.areas.length}`)
   console.log(`  Items:     ${simplified.items.length}`)
 
-  console.log('\n🔍 Simplified Output (formatted):')
-  console.log(JSON.stringify(simplified, null, 2))
+  console.log('\n🔍 Formatted Output (for debugging):')
+  console.log(formattedJSON)
+
+  console.log('\n📦 Minified Output (for LLM):')
+  console.log(minifiedJSON)
+  console.log(`\n   Length: ${minifiedJSON.length.toLocaleString()} characters`)
 
   console.log('\n' + '='.repeat(80))
   console.log('✅ Test completed successfully!')
+  console.log(`   Final token reduction: ${savings.minifiedSavingsPercent}%`)
   console.log('='.repeat(80))
 
-  return simplified
+  return {
+    simplified,
+    minifiedJSON,
+    formattedJSON,
+    savings
+  }
 }
 
 // Uncomment to run the test directly:

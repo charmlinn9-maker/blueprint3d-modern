@@ -1,5 +1,5 @@
 // Storage Service - Extensible design for local and remote storage
-import { simplifyCanvasData, estimateTokenSavings } from './simplify-canvas-data'
+import { simplifyCanvasData, toMinifiedJSON } from './simplify-canvas-data'
 
 export interface FloorplanData {
   id: string
@@ -269,25 +269,8 @@ class RemoteStorageService implements IStorageService {
     // Simplify canvas data for LLM consumption
     const simplifiedData = simplifyCanvasData(parsedData)
 
-    // Calculate token savings
-    const savings = estimateTokenSavings(parsedData, simplifiedData)
-
-    // Console output for verification (as requested - not saving to DB yet)
-    console.group('🎨 Canvas Data Simplification')
-    console.log('📊 Token Savings:', {
-      original: `${savings.originalSize.toLocaleString()} chars`,
-      simplified: `${savings.simplifiedSize.toLocaleString()} chars`,
-      saved: `${savings.savings.toLocaleString()} chars (${savings.savingsPercent}%)`
-    })
-    console.log('📦 Simplified Data Structure:', {
-      materials: simplifiedData.materials.length,
-      corners: simplifiedData.corners.length,
-      walls: simplifiedData.layout.walls.length,
-      areas: simplifiedData.layout.areas.length,
-      items: simplifiedData.items.length
-    })
-    console.log('🔍 Detailed Simplified Data:', JSON.stringify(simplifiedData, null, 2))
-    console.groupEnd()
+    // Get minified JSON (this is what should be sent to LLM)
+    const minifiedJSONString = toMinifiedJSON(simplifiedData)
 
     const response = await fetch(this.apiUrl, {
       method: 'POST',
@@ -295,7 +278,7 @@ class RemoteStorageService implements IStorageService {
       body: JSON.stringify({
         roomName: name,
         canvasData: data, // Original data
-        //canvasDataSimplified: simplifiedData, // Simplified data for LLM
+        canvasDataSimplified: minifiedJSONString, // Simplified data for LLM
         previewBase64: thumbnail || ''
       })
     })
@@ -384,25 +367,8 @@ class RemoteStorageService implements IStorageService {
     // Simplify canvas data for LLM consumption
     const simplifiedData = simplifyCanvasData(parsedData)
 
-    // Calculate token savings
-    const savings = estimateTokenSavings(parsedData, simplifiedData)
-
-    // Console output for verification (as requested - not saving to DB yet)
-    console.group('🎨 Canvas Data Simplification (Update)')
-    console.log('📊 Token Savings:', {
-      original: `${savings.originalSize.toLocaleString()} chars`,
-      simplified: `${savings.simplifiedSize.toLocaleString()} chars`,
-      saved: `${savings.savings.toLocaleString()} chars (${savings.savingsPercent}%)`
-    })
-    console.log('📦 Simplified Data Structure:', {
-      materials: simplifiedData.materials.length,
-      corners: simplifiedData.corners.length,
-      walls: simplifiedData.layout.walls.length,
-      areas: simplifiedData.layout.areas.length,
-      items: simplifiedData.items.length
-    })
-    console.log('🔍 Detailed Simplified Data:', JSON.stringify(simplifiedData, null, 2))
-    console.groupEnd()
+    // Get minified JSON (this is what should be sent to LLM)
+    const minifiedJSONString = toMinifiedJSON(simplifiedData)
 
     const response = await fetch(`${this.apiUrl}/${id}`, {
       method: 'PUT',
@@ -410,7 +376,7 @@ class RemoteStorageService implements IStorageService {
       body: JSON.stringify({
         roomName: name,
         canvasData: data, // Original data
-        //canvasDataSimplified: simplifiedData, // Simplified data for LLM
+        canvasDataSimplified: minifiedJSONString, // Simplified data for LLM
         previewBase64: thumbnail
       })
     })

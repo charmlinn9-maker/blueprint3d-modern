@@ -32,8 +32,6 @@ interface SimplifiedWall {
 
 interface SimplifiedItem {
   name: string
-  type: number
-  url: string
   pos: [number, number, number] // [x, y, z]
   rot: number
   scale: [number, number, number] // [x, y, z]
@@ -174,12 +172,10 @@ export function simplifyCanvasData(data: CanvasData): SimplifiedCanvasData {
     }
   })
 
-  // Step 5: Simplify items
+  // Step 5: Simplify items (remove type and url to reduce tokens)
   const simplifiedItems: SimplifiedItem[] = items.map((item) => {
     const simplified: SimplifiedItem = {
       name: item.item_name,
-      type: item.item_type,
-      url: item.model_url,
       pos: [
         Math.round(item.xpos * 100) / 100,
         Math.round(item.ypos * 100) / 100,
@@ -216,23 +212,47 @@ export function simplifyCanvasData(data: CanvasData): SimplifiedCanvasData {
 }
 
 /**
+ * Convert simplified canvas data to minified JSON string (no whitespace)
+ * This is the format that should be sent to LLM for maximum token efficiency
+ */
+export function toMinifiedJSON(data: SimplifiedCanvasData): string {
+  return JSON.stringify(data)
+}
+
+/**
+ * Convert simplified canvas data to formatted JSON string (for debugging)
+ */
+export function toFormattedJSON(data: SimplifiedCanvasData): string {
+  return JSON.stringify(data, null, 2)
+}
+
+/**
  * Calculate token savings estimate
  */
 export function estimateTokenSavings(original: CanvasData, simplified: SimplifiedCanvasData): {
   originalSize: number
   simplifiedSize: number
+  minifiedSize: number
   savings: number
   savingsPercent: number
+  minifiedSavings: number
+  minifiedSavingsPercent: number
 } {
   const originalSize = JSON.stringify(original).length
-  const simplifiedSize = JSON.stringify(simplified).length
+  const simplifiedSize = JSON.stringify(simplified, null, 2).length
+  const minifiedSize = JSON.stringify(simplified).length
   const savings = originalSize - simplifiedSize
   const savingsPercent = Math.round((savings / originalSize) * 100)
+  const minifiedSavings = originalSize - minifiedSize
+  const minifiedSavingsPercent = Math.round((minifiedSavings / originalSize) * 100)
 
   return {
     originalSize,
     simplifiedSize,
+    minifiedSize,
     savings,
-    savingsPercent
+    savingsPercent,
+    minifiedSavings,
+    minifiedSavingsPercent
   }
 }

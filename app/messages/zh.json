@@ -34,6 +34,8 @@
     "saveFirst": "保存您的第一个方案以在此处查看",
     "loading": "加载中...",
     "loadButton": "加载",
+    "loadError": "加载平面图失败",
+    "loadNotFound": "平面图不存在",
     "downloadButton": "下载",
     "deleteButton": "删除",
     "deleteConfirm": "确定要删除此平面图吗?",

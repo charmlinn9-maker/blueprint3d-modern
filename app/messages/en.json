@@ -34,6 +34,8 @@
     "saveFirst": "Save your first floorplan to see it here",
     "loading": "Loading...",
     "loadButton": "Load",
+    "loadError": "Failed to load floorplan",
+    "loadNotFound": "Floorplan not found",
     "downloadButton": "Download",
     "deleteButton": "Delete",
     "deleteConfirm": "Are you sure you want to delete this floorplan?",

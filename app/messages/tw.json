@@ -34,6 +34,8 @@
     "saveFirst": "先儲存你的第一個平面圖即可在此查看",
     "loading": "載入中...",
     "loadButton": "載入",
+    "loadError": "載入平面圖失敗",
+    "loadNotFound": "平面圖不存在",
     "downloadButton": "下載",
     "deleteButton": "刪除",
     "deleteConfirm": "確定要刪除此平面圖嗎？",

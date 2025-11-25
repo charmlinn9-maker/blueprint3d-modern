@@ -12,6 +12,7 @@ export class Edge {
   private planes: THREE.Mesh[] = []
   private basePlanes: THREE.Mesh[] = [] // always visible
   private texture: THREE.Texture | null = null
+  private currentTextureUrl: string = ''
   private readonly textureLoader = new THREE.TextureLoader()
   private readonly lightMap: THREE.Texture
   // Brightened colors for Three.js r181
@@ -132,16 +133,25 @@ export class Edge {
     const stretch = textureData.stretch
     const url = textureData.url
     const scale = textureData.scale
-    const loader = new THREE.TextureLoader()
-    this.texture = loader.load(url, cb)
-    this.texture.colorSpace = THREE.SRGBColorSpace
-    if (!stretch) {
-      const height = this.wall.height
-      const width = this.edge.interiorDistance()
-      this.texture.wrapT = THREE.RepeatWrapping
-      this.texture.wrapS = THREE.RepeatWrapping
-      this.texture.repeat.set(width / scale, height / scale)
-      this.texture.needsUpdate = true
+
+    // Only reload texture if URL has changed
+    if (url !== this.currentTextureUrl) {
+      this.currentTextureUrl = url
+      const loader = new THREE.TextureLoader()
+      this.texture = loader.load(url, cb)
+      this.texture.colorSpace = THREE.SRGBColorSpace
+    }
+
+    // Always update texture parameters (stretch, scale, etc.)
+    if (this.texture) {
+      if (!stretch) {
+        const height = this.wall.height
+        const width = this.edge.interiorDistance()
+        this.texture.wrapT = THREE.RepeatWrapping
+        this.texture.wrapS = THREE.RepeatWrapping
+        this.texture.repeat.set(width / scale, height / scale)
+        this.texture.needsUpdate = true
+      }
     }
   }
 
@@ -288,7 +298,22 @@ export class Edge {
     }
 
     geometry.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2))
+
+    // Compute vertex normals for proper lighting
     geometry.computeVertexNormals()
+
+    // Normalize all normals to ensure consistent shading
+    const normalAttribute = geometry.getAttribute('normal')
+    for (let i = 0; i < normalAttribute.count; i++) {
+      const normal = new THREE.Vector3(
+        normalAttribute.getX(i),
+        normalAttribute.getY(i),
+        normalAttribute.getZ(i)
+      )
+      normal.normalize()
+      normalAttribute.setXYZ(i, normal.x, normal.y, normal.z)
+    }
+    normalAttribute.needsUpdate = true
 
     const mesh = new THREE.Mesh(geometry, material)
 

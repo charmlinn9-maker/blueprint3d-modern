@@ -8,8 +8,9 @@ import { Controls } from './controls'
 import { HUD } from './hud'
 import type { Model } from '../model/model'
 import type { Scene } from '../model/scene'
-// @ts-ignore - Item is imported but not used, keeping for future use
 import type { Item } from '../items/item'
+import type { HalfEdge } from '../model/half_edge'
+import type { Room } from '../model/room'
 
 interface MainOptions {
   resize?: boolean
@@ -28,18 +29,18 @@ export class Main {
   public elementHeight!: number
   public elementWidth!: number
 
-  public itemSelectedCallbacks = new EventEmitter() // item
-  public itemUnselectedCallbacks = new EventEmitter()
-  public wallClicked = new EventEmitter() // wall
-  public floorClicked = new EventEmitter() // floor
-  public nothingClicked = new EventEmitter()
+  public itemSelectedCallbacks = new EventEmitter<Item>() // item
+  public itemUnselectedCallbacks = new EventEmitter<void>()
+  public wallClicked = new EventEmitter<HalfEdge>() // wall
+  public floorClicked = new EventEmitter<Room>() // floor
+  public nothingClicked = new EventEmitter<void>()
 
   private readonly options: Required<MainOptions>
-  private readonly scene: Scene
+  public readonly scene: Scene
   private readonly model: Model
   private domElement!: HTMLElement
-  private camera!: THREE.PerspectiveCamera
-  private renderer!: THREE.WebGLRenderer
+  public camera!: THREE.PerspectiveCamera
+  public renderer!: THREE.WebGLRenderer
   private controller!: Controller
   // @ts-ignore - floorplan is declared but not used, keeping for future use
   private floorplan!: FloorplanThree

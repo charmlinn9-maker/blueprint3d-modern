@@ -21,7 +21,7 @@ export interface Options {
 export class Blueprint3d {
   public model: Model
 
-  public three: any // Main;
+  public three: Main
 
   public floorplanner?: Floorplanner
 

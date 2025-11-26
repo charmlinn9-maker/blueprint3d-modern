@@ -14,7 +14,7 @@ var Polygon = require('polygon')
 
 /** Default texture to be used if nothing is provided. */
 const defaultRoomTexture = {
-  url: '/rooms/textures/hardwood.png',
+  url: 'https://cdn-images.lumenfeng.com/models-cover/hardwood.png',
   scale: 400
 }
 

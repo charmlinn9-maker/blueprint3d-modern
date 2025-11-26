@@ -7,7 +7,7 @@ import type { HalfEdge } from './half_edge'
 
 /** The default wall texture. */
 const defaultWallTexture = {
-  url: '/rooms/textures/wallmap.png',
+  url: 'https://cdn-images.lumenfeng.com/models-cover/wallmap.png',
   stretch: true,
   scale: 0
 }
